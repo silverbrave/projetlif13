@@ -151,9 +151,19 @@ public class InterfaceFx extends Application {
 
                 pane.getChildren().add(nombre);
 
-                Image img = new Image("images/flag.jpg");
-                ImageView imgView = new ImageView(img);
-
+                Image img = new Image("images/flag.png");
+                ImageView flag = new ImageView(img);
+                flag.setFitWidth(48);
+                flag.setPreserveRatio(true);
+                flag.setSmooth(true);
+                flag.setCache(true);
+                
+                Image img2 = new Image("images/idk.png");
+                ImageView idk = new ImageView(img2);
+                idk.setFitWidth(48);
+                idk.setPreserveRatio(true);
+                idk.setSmooth(true);
+                idk.setCache(true);
         //imgView.fitWidthProperty().bind(jeu.widthProperty()/colonnes); 
 
                 //jeu.setCenter(img);
@@ -204,26 +214,22 @@ public class InterfaceFx extends Application {
                         }
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
                         Cellule cFlag = demineur.flag(fi, fj);
-
-                            //Label lab = new Label(Integer.toString(cFlag.getStatus()));
-                        //lab.setMinWidth(size);
-                        //lab.setAlignment(Pos.CENTER);
-                        //lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                            //pane.getChildren().add(lab);
-                        //jeu.getChildren().add(fi*fj, lab);
-                        if (demineur.getGrilleExterieur()[fj][fj].getStatus() == -2) // sa marche pas pour l'instant
-                        {
-                            jeu.add(imgView, cFlag.getX(), cFlag.getY());
-                        } else if (demineur.getGrilleExterieur()[fj][fj].getStatus() == -3)
-                        {
-                            //on met ?
-                        }
-                        else if (demineur.getGrilleExterieur()[fj][fj].getStatus() == -5)
-                        {
-                            //on recouvre
-                        }
-                        
+                        switch (demineur.getGrilleExterieur()[fi][fj].getStatus()) {
+                        // ça marche pas pour l'instant
+                            case -2:
+                                jeu.add(flag, cFlag.getX(), cFlag.getY());
+                                break;
+                        //on met ?
+                            case -3:
+                                jeu.add(idk, cFlag.getX(), cFlag.getY());
+                                break;
+                        //on recouvre
                         //jeu.setStyle("fx-img: ");
+                            case -5:
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     //if (e.getButton().equals(MouseButton.SECONDARY)) {

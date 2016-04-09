@@ -6,3 +6,6 @@
 /monDemineur/monDemineur/dist/
 /monDemineur/monDemineur/build/
 *.xml
+*.xml
+*.properties
+*.jar
