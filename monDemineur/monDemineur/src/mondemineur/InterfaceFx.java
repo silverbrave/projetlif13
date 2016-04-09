@@ -175,16 +175,18 @@ public class InterfaceFx extends Application {
                     if (e.getButton().equals(MouseButton.PRIMARY) && firstClick) {
 
                         firstClick = false ;
-                        demineur = new GrilleJeu(9, 9, 10, fi, fj);
-                        System.out.println(demineur.toString());
+                        demineur = new GrilleJeu(10, 10, 10, fi, fj);
+                        System.out.println(demineur.toString()); // temporaire
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         for (Cellule cel : listUpdate) {
                             Label lab = new Label(Integer.toString(cel.getStatus()));
                             lab.setMinWidth(size);
                             lab.setAlignment(Pos.CENTER);
                             lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                            pane.getChildren().add(lab);
-                           
+                            //pane.getChildren().add(lab);
+                           //jeu.getChildren().add(fi*fj, lab);
+                            jeu.add(lab, cel.getX(),cel.getY() );
+                            
                             
                         }
 
@@ -192,12 +194,15 @@ public class InterfaceFx extends Application {
                     else if(e.getButton().equals(MouseButton.PRIMARY))
                     {
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
+                        listUpdate.toString();
                         for (Cellule cel : listUpdate) {
                             Label lab = new Label(Integer.toString(cel.getStatus()));
                             lab.setMinWidth(size);
                             lab.setAlignment(Pos.CENTER);
                             lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                            pane.getChildren().add(lab);
+                            //pane.getChildren().add(lab);
+                            //jeu.getChildren().add(fi*fj, lab);
+                            jeu.add(lab, cel.getX(),cel.getY() );
                         }
                     }
 

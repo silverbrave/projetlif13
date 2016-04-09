@@ -255,8 +255,8 @@ public class GrilleJeu {
     @Override
     public String toString() {
         String s = "";
-        for (int i = 0; i < colonnes; i++) {
-            for (int j = 0; j < lignes; j++) {
+        for (int i = 0; i < lignes; i++) {
+            for (int j = 0; j < colonnes; j++) {
                 s = s + grille[i][j].toString() + " ";
             }
             s = s + "\n";
