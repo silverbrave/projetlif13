@@ -1,6 +1,0 @@
-#mettre ici les fichiers qu'on ne souhaite pas update
-
-/monDemineur/monDemineur/buid/built-jar.properties
-/monDemineur/monDemineur/dist/monDemineur.html
-/monDemineur/monDemineur/dist/monDemineur.jar
-/monDemineur/monDemineur/dist/web-files/dtjava.js
