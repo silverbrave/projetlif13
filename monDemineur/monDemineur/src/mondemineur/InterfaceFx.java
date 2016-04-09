@@ -176,6 +176,7 @@ public class InterfaceFx extends Application {
 
                         firstClick = false ;
                         demineur = new GrilleJeu(9, 9, 10, fi, fj);
+                        System.out.println(demineur.toString());
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         for (Cellule cel : listUpdate) {
                             Label lab = new Label(Integer.toString(cel.getStatus()));

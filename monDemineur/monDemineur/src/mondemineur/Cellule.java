@@ -34,5 +34,12 @@ public class Cellule {
         this.status = status;
     }
     
+    @Override
+    public String toString()
+    {
+        return Integer.toString(status);
+        
+    }
+    
     
 }

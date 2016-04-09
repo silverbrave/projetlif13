@@ -62,7 +62,6 @@ public class GrilleJeu {
         this.lignes = lignes;
         this.colonnes = colonnes;
     }
-    
 
     public int getBombes() {
         return bombes;
@@ -121,16 +120,18 @@ public class GrilleJeu {
         // place les bombes dans la grille
         Random random = new Random(System.currentTimeMillis());
         for (int i = 0; i < bombes; i++) {
-            while (true) {
-                int l = Math.abs(random.nextInt() % lignes);
-                int c = Math.abs(random.nextInt() % colonnes);
-                if (grille[l][c].getStatus() != BOMBE || (l != firstLigne && c != firstColonne)) {
-                    grille[l][c].setStatus(BOMBE);
-                    updateNbBombes(l, c);
-                    break;
-                }
+
+            int l = Math.abs(random.nextInt() % lignes);
+            int c = Math.abs(random.nextInt() % colonnes);
+            while (grille[l][c].getStatus() == BOMBE || (l == firstLigne && c == firstColonne)) {
+                l = Math.abs(random.nextInt() % lignes);
+                c = Math.abs(random.nextInt() % colonnes);
             }
+            grille[l][c].setStatus(BOMBE);
+            updateNbBombes(l, c);
+
         }
+
     }
 
     private void updateNbBombes(int l, int c) {
@@ -238,16 +239,29 @@ public class GrilleJeu {
     public Cellule getCellule(int l, int c) {
         return grilleExterieur[l][c];
     }
-    
-    public List finPartie()
-    {
+
+    public List finPartie() {
         List<Cellule> listFinal = new ArrayList();
         for (int i = 0; i < lignes; i++) {
             for (int j = 0; j < colonnes; j++) {
-                if(grille[i][j].getStatus()==BOMBE)
-                listFinal.add(grille[i][j]); // remplissage de la liste avec toute les bombes
+                if (grille[i][j].getStatus() == BOMBE) {
+                    listFinal.add(grille[i][j]); // remplissage de la liste avec toute les bombes
+                }
             }
         }
         return listFinal;
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        for (int i = 0; i < colonnes; i++) {
+            for (int j = 0; j < lignes; j++) {
+                s = s + grille[i][j].toString() + " ";
+            }
+            s = s + "\n";
+        }
+        return s;
+
     }
 }
