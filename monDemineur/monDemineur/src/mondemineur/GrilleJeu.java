@@ -57,6 +57,13 @@ public class GrilleJeu {
         initialiseGrille(firstLigne, firstColonne);
     }
 
+    public GrilleJeu(int bombes, int lignes, int colonnes) {
+        this.bombes = bombes;
+        this.lignes = lignes;
+        this.colonnes = colonnes;
+    }
+    
+
     public int getBombes() {
         return bombes;
     }

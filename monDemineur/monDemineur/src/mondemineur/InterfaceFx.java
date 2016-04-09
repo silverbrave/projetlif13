@@ -6,13 +6,19 @@
 package mondemineur;
 
 import java.util.LinkedList;
+import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -34,16 +41,62 @@ public class InterfaceFx extends Application {
     int size = 50;
     boolean firstClick = true;
     GrilleJeu demineur;
-
+    private int width,height;
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) {
+        //nb de lignes pour la grille de l'interface
+        int nbL=0;
+        //nb de colonnes pour la grille de l'interface
+        int nbC=0;
+        //fenetre modale pour les lvl 
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Niveau de difficulté");
+        alert.setHeaderText("Choisir un niveau de difficulté");
+      //  alert.setContentText("Choose your option.");
+
+        ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
+        ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
+        ButtonType buttonTypeThree = new ButtonType("Difficile(17*15)");
+       // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree,null);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOne){
+        //l'utilisateur choisit facile(15*15)
+       // System.out.println("Vous avez choisit : "+ result.get().getText());
+        GrilleJeu griF = new GrilleJeu(10,10,10);
+        nbL=10;
+        nbC=10;
+        width=600;
+        height=700;
+        } else if (result.get() == buttonTypeTwo) {
+         //l'utilisateur choisit moyen(25*25)
+          GrilleJeu griM = new GrilleJeu(15,15,20);
+           nbL=15;
+            nbC=15;
+             width=800;
+            height=900;
+        } else if (result.get() == buttonTypeThree) {
+         //l'utilisateur choisit difficile(50*50)
+          GrilleJeu griD = new GrilleJeu(17,15,40);
+           nbL=17;
+        nbC=15;
+        width=950;
+         height=1000;
+        } else {
+        // pb rage quit 
+        }
+        
+       
+        
         stage.setTitle("Demineur");
-        stage.setWidth(600);
-        stage.setHeight(700);
+        stage.setWidth(width);
+        stage.setHeight(height);
 
         jeu.setGridLinesVisible(true);
         jeu.setAlignment(Pos.CENTER);
@@ -76,17 +129,17 @@ public class InterfaceFx extends Application {
 
         //IL Faut aligner les label au centre
         //Peut etre tenter de les mettre dans un autre composant...
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < nbC; i++) {
             ColumnConstraints column = new ColumnConstraints(size);
             jeu.getColumnConstraints().add(column);
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < nbL; i++) {
             RowConstraints row = new RowConstraints(size);
             jeu.getRowConstraints().add(row);
         }
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < nbC; i++) {
+            for (int j = 0; j < nbL; j++) {
                 //addPane(i, j);
                 StackPane border = new StackPane();
                 Pane pane = new Pane();
@@ -107,8 +160,16 @@ public class InterfaceFx extends Application {
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1));
                 border.getChildren().add(pane);
                 pane.setStyle("-fx-background-color: grey;");
-                border.setStyle("-fx-background-color: black;");
-                final int fi = i;
+               // border.setStyle("-fx-background-color: black;");
+                InnerShadow shad = new InnerShadow();
+                shad.setWidth(20);
+                shad.setHeight(20);
+                shad.setOffsetX(10);
+                shad.setOffsetY(10);
+                shad.setColor(Color.WHITE);
+                shad.setRadius(50);
+                pane.setEffect(shad);
+               final int fi = i;
                 final int fj = j;
                 pane.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY) && firstClick) {
