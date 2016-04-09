@@ -109,8 +109,6 @@ public class GrilleJeu {
                 grille[i][j] = new Cellule(i, j, VIDE);
                 grilleExterieur[i][j] = new Cellule(i, j, COUVERTE);
             }
-            //Arrays.fill(grille[i], new(Cellule(VIDE));
-            //Arrays.fill(grilleExterieur[i], COUVERTE);
         }
 
         // place les bombes dans la grille
@@ -164,7 +162,7 @@ public class GrilleJeu {
         return grilleExterieur[l][c];
     }
 
-    private List aReveler(int l, int c) {
+    private List aReveler(int l, int c) {//renvoie une liste de case à révéler
         // On fait rien si la case a déjà été révélé
         if (grilleExterieur[l][c].getStatus() != COUVERTE && grilleExterieur[l][c].getStatus() != IDK) {
             return LISTEVIDE;
@@ -236,8 +234,13 @@ public class GrilleJeu {
     
     public List finPartie()
     {
-        for tout 
-        grilleExterieur[cel.getX()][cel.getY()].setStatus(grille[cel.getX()][cel.getY()].getStatus());
-        return null;
+        List<Cellule> listFinal = new ArrayList();
+        for (int i = 0; i < lignes; i++) {
+            for (int j = 0; j < colonnes; j++) {
+                if(grille[i][j].getStatus()==BOMBE)
+                listFinal.add(grille[i][j]); // remplissage de la liste avec toute les bombes
+            }
+        }
+        return listFinal;
     }
 }
