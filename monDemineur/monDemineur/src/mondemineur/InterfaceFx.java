@@ -78,6 +78,7 @@ public class InterfaceFx extends Application {
             height = 700;
         } else if (result.get() == buttonTypeTwo) {
             //l'utilisateur choisit moyen(25*25)
+           
             GrilleJeu griM = new GrilleJeu(15, 15, 20);
             nbL = 15;
             nbC = 15;
@@ -85,7 +86,8 @@ public class InterfaceFx extends Application {
             width = 900;
             height = 900;
         } else if (result.get() == buttonTypeThree) {
-            //l'utilisateur choisit difficile(50*50)
+            //l'utilisateur choisit difficile(15*25)
+             //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
             GrilleJeu griD = new GrilleJeu(17, 15, 40);
             nbL = 15;
             nbC = 25;
