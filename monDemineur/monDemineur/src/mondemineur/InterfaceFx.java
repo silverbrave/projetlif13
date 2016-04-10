@@ -183,7 +183,9 @@ public class InterfaceFx extends Application {
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
                 //border.setCenter(pane);
-                pane.setStyle("-fx-background-color: white;");
+                
+                //c est ici qu'il fallait modifier pour afficher ton image 
+             //   pane.setStyle("-fx-background-color: white;");
 
                 final int fi = i;
                 final int fj = j;
