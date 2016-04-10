@@ -52,6 +52,7 @@ public class InterfaceFx extends Application {
         int nbL = 0;
         //nb de colonnes pour la grille de l'interface
         int nbC = 0;
+        int nbB=0; // nb bombes
         //fenetre modale pour les lvl 
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Niveau de difficulté");
@@ -60,7 +61,7 @@ public class InterfaceFx extends Application {
 
         ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
         ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
-        ButtonType buttonTypeThree = new ButtonType("Difficile(17*15)");
+        ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
         // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, null);
@@ -72,6 +73,7 @@ public class InterfaceFx extends Application {
             GrilleJeu griF = new GrilleJeu(10, 10, 10);
             nbL = 10;
             nbC = 10;
+            nbB = 10 ;
             width = 600;
             height = 700;
         } else if (result.get() == buttonTypeTwo) {
@@ -79,14 +81,16 @@ public class InterfaceFx extends Application {
             GrilleJeu griM = new GrilleJeu(15, 15, 20);
             nbL = 15;
             nbC = 15;
-            width = 800;
+            nbB = 25 ;
+            width = 900;
             height = 900;
         } else if (result.get() == buttonTypeThree) {
             //l'utilisateur choisit difficile(50*50)
             GrilleJeu griD = new GrilleJeu(17, 15, 40);
-            nbL = 17;
-            nbC = 15;
-            width = 950;
+            nbL = 15;
+            nbC = 25;
+            nbB = 80 ;
+            width = 1400;
             height = 1000;
         } else {
             // pb rage quit 
@@ -150,16 +154,16 @@ public class InterfaceFx extends Application {
                 nombre.setAlignment(Pos.CENTER);
 
                 pane.getChildren().add(nombre);
-                
+
                 Image img0 = new Image("images/tile.jpg");
                 ImageView couverte = new ImageView(img0);
                 couverte.setFitWidth(48);
                 couverte.setPreserveRatio(true);
                 couverte.setSmooth(true);
                 couverte.setCache(true);
-                
-                jeu.add(couverte,i,j);//POURQUOI CA MARCHE PAS CA MET DES IMAGES BLANCHES SUR TOUTES LES CASES
-                
+
+                jeu.add(couverte, i, j);//POURQUOI CA MARCHE PAS CA MET DES IMAGES BLANCHES SUR TOUTES LES CASES
+
                 Image img = new Image("images/flag.jpg");
                 ImageView flag = new ImageView(img);
                 flag.setFitWidth(48);
@@ -181,14 +185,16 @@ public class InterfaceFx extends Application {
                 //border.setCenter(pane);
                 pane.setStyle("-fx-background-color: white;");
 
-
                 final int fi = i;
                 final int fj = j;
+                final int fnbL = nbL;
+                final int fnbC = nbC;
+                final int fnbB = nbB;
                 pane.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY) && firstClick) {
-                        
+
                         firstClick = false;
-                        demineur = new GrilleJeu(10, 10, 10, fi, fj);
+                        demineur = new GrilleJeu(fnbL, fnbC, fnbB, fi, fj);
                         System.out.println(demineur.toString()); // temporaire
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         for (Cellule cel : listUpdate) {
@@ -201,22 +207,43 @@ public class InterfaceFx extends Application {
                             //pane.getChildren().add(lab);
                             //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
-                            
 
                         }
 
-                    } else if (e.getButton().equals(MouseButton.PRIMARY)) {
-                        
+                    } else if (e.getButton().equals(MouseButton.PRIMARY) && (demineur.getGrilleExterieur()[fi][fj].getStatus() == -5))  {
+
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         listUpdate.toString();
-                        for (Cellule cel : listUpdate) {
-                            Label lab = new Label(Integer.toString(cel.getStatus()));
-                            lab.setMinWidth(size);
-                            lab.setAlignment(Pos.CENTER);
-                            lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                            //pane.getChildren().add(lab);
-                            //jeu.getChildren().add(fi*fj, lab);
-                            jeu.add(lab, cel.getX(), cel.getY());
+                         for (Cellule cel : listUpdate) {
+                            if(cel.getStatus()==-1){
+                                Image img3 = new Image("images/bombe.png");
+                                ImageView bombe = new ImageView(img3);
+                                bombe.setFitWidth(48);
+                                bombe.setPreserveRatio(true);
+                                bombe.setSmooth(true);
+                                bombe.setCache(true);
+                                jeu.add(bombe, cel.getX(), cel.getY());
+                                
+                            }/*else if (cel.getStatus()==0){
+                                Label lab = new Label("");
+                                lab.setMinWidth(size);
+                                lab.setAlignment(Pos.CENTER);
+                                lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                //lab.setMouseTransparent(true);
+                                //pane.getChildren().add(lab);
+                                //jeu.getChildren().add(fi*fj, lab);
+                                jeu.add(lab, cel.getX(), cel.getY());                                
+                            }*/
+                            else{
+                                Label lab = new Label(Integer.toString(cel.getStatus()));
+                                lab.setMinWidth(size);
+                                lab.setAlignment(Pos.CENTER);
+                                lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                //lab.setMouseTransparent(true);
+                                //pane.getChildren().add(lab);
+                                //jeu.getChildren().add(fi*fj, lab);
+                                jeu.add(lab, cel.getX(), cel.getY());                                
+                            }
                         }
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
                         Cellule cFlag = demineur.flag(fi, fj);
@@ -225,15 +252,15 @@ public class InterfaceFx extends Application {
                         switch (demineur.getGrilleExterieur()[fi][fj].getStatus()) {
                             // ça marche pas pour l'instant
                             case -2:
-                                
+
                                 jeu.add(flag, cFlag.getX(), cFlag.getY());
-                                
+
                                 break;
                             //on met ?
                             case -3:
                                 jeu.getChildren().remove(flag);
                                 jeu.add(idk, cFlag.getX(), cFlag.getY());
-                                
+
                                 break;
                             //on recouvre
                             //jeu.setStyle("fx-img: ");
