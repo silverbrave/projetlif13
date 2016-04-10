@@ -17,7 +17,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
@@ -26,7 +25,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -64,7 +62,7 @@ public class InterfaceFx extends Application {
         ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
         // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, null);
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
@@ -249,6 +247,11 @@ public class InterfaceFx extends Application {
                                 jeu.add(lab, cel.getX(), cel.getY());                                
                             }
                         }
+                         if (demineur.estFini(fi, fj))
+                         {
+                             // on affiche une fenetre et on bloque le reste
+                         }
+                         
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
                         Cellule cFlag = demineur.flag(fi, fj);
                         flag.setMouseTransparent(true);
@@ -274,6 +277,11 @@ public class InterfaceFx extends Application {
                             default:
                                 break;
                         }
+                        
+                        if (demineur.estFini(fi, fj))
+                         {
+                             // on affiche une fenetre et on bloque le reste
+                         }
                     }
 
                     //if (e.getButton().equals(MouseButton.SECONDARY)) {

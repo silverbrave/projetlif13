@@ -93,8 +93,29 @@ public class GrilleJeu {
     }
 
     // retourne true si toutes les bombes ont été identifiés
-    public boolean estFini() {
-        return (celluleRestantes == 0);
+    public boolean estFini(int l, int c) {
+        if (grille[l][c].getStatus() == BOMBE) {
+            return true;
+        } else if (celluleRestantes == 0) {
+            return true;
+        } else if (flags > 0) {
+            for (int i = 0; i < lignes; i++) {
+                for (int j = 0; j < colonnes; j++) {
+                    if (grilleExterieur[i][j].getStatus() == FLAG && grille[i][j].getStatus() != BOMBE) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean gagne() {
+        return false ;
     }
 
     public boolean doPointInterrogation() {
@@ -181,7 +202,7 @@ public class GrilleJeu {
         // Si on révele une bombe = fin du jeu
         if (val == BOMBE) {
             grilleExterieur[l][c].setStatus(EXPLODE);
-            return finPartie();
+            return finPartieBomb();
         }
 
         LinkedList cellulesOuvertes = new LinkedList();
@@ -240,7 +261,7 @@ public class GrilleJeu {
         return grilleExterieur[l][c];
     }
 
-    public List finPartie() {
+    public List finPartieBomb() {
         List<Cellule> listFinal = new ArrayList();
         for (int i = 0; i < lignes; i++) {
             for (int j = 0; j < colonnes; j++) {
