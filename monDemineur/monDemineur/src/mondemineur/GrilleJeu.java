@@ -285,4 +285,24 @@ public class GrilleJeu {
         return s;
 
     }
+    public boolean gagne(int l , int c) {
+        if (grille[l][c].getStatus() == BOMBE) {
+            return false;
+        } else if (celluleRestantes == 0) {
+            return true;
+        } else if (flags > 0) {
+            for (int i = 0; i < lignes; i++) {
+                for (int j = 0; j < colonnes; j++) {
+                    if (grilleExterieur[i][j].getStatus() == FLAG && grille[i][j].getStatus() != BOMBE) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 }

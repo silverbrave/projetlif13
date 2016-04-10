@@ -249,7 +249,9 @@ public class InterfaceFx extends Application {
                         }
                          if (demineur.estFini(fi, fj))
                          {
-                             // on affiche une fenetre et on bloque le reste
+                            // on affiche une fenetre et on bloque le reste
+                             //juste un test de l'affichage
+                            afficheFenetre(true);
                          }
                          
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
@@ -281,6 +283,7 @@ public class InterfaceFx extends Application {
                         if (demineur.estFini(fi, fj))
                          {
                              // on affiche une fenetre et on bloque le reste
+                             
                          }
                     }
 
@@ -318,5 +321,17 @@ public class InterfaceFx extends Application {
 
         //initialisation();
     }
-
+        //methode pour afficher une fenetre a la fin de la partie
+    public void afficheFenetre(boolean winner){
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Fin du jeu !");
+        alert.setHeaderText(null);
+        if(winner){
+             alert.setContentText("GG, maintenant essaie avec un autre niveau");
+        }
+        else{
+             alert.setContentText("Dommage, retente ta chance!");
+        }
+        alert.showAndWait();
+    }
 }
