@@ -150,15 +150,24 @@ public class InterfaceFx extends Application {
                 nombre.setAlignment(Pos.CENTER);
 
                 pane.getChildren().add(nombre);
-
-                Image img = new Image("images/flag.png");
+                
+                Image img0 = new Image("images/tile.jpg");
+                ImageView couverte = new ImageView(img0);
+                couverte.setFitWidth(48);
+                couverte.setPreserveRatio(true);
+                couverte.setSmooth(true);
+                couverte.setCache(true);
+                
+                jeu.add(couverte,i,j);//POURQUOI CA MARCHE PAS CA MET DES IMAGES BLANCHES SUR TOUTES LES CASES
+                
+                Image img = new Image("images/flag.jpg");
                 ImageView flag = new ImageView(img);
                 flag.setFitWidth(48);
                 flag.setPreserveRatio(true);
                 flag.setSmooth(true);
                 flag.setCache(true);
 
-                Image img2 = new Image("images/idk.png");
+                Image img2 = new Image("images/idk.jpg");
                 ImageView idk = new ImageView(img2);
                 idk.setFitWidth(48);
                 idk.setPreserveRatio(true);
@@ -170,16 +179,8 @@ public class InterfaceFx extends Application {
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
                 //border.setCenter(pane);
-                pane.setStyle("-fx-background-color: grey;");
-                // border.setStyle("-fx-background-color: black;");
-                InnerShadow shad = new InnerShadow();
-                shad.setWidth(20);
-                shad.setHeight(20);
-                shad.setOffsetX(10);
-                shad.setOffsetY(10);
-                shad.setColor(Color.WHITE);
-                shad.setRadius(50);
-                pane.setEffect(shad);
+                pane.setStyle("-fx-background-color: white;");
+
 
                 final int fi = i;
                 final int fj = j;
