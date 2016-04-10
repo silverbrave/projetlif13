@@ -157,7 +157,7 @@ public class GrilleJeu {
                 flags += 1;
                 break;
             case FLAG:
-                grilleExterieur[l][c].setStatus(pointInterrogation ? IDK : COUVERTE);//operateur ternaire magique
+                grilleExterieur[l][c].setStatus(IDK);//operateur ternaire magique
                 flags -= 1;
                 break;
             case IDK:

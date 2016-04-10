@@ -10,20 +10,16 @@ import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -184,11 +180,12 @@ public class InterfaceFx extends Application {
                 shad.setColor(Color.WHITE);
                 shad.setRadius(50);
                 pane.setEffect(shad);
+
                 final int fi = i;
                 final int fj = j;
                 pane.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY) && firstClick) {
-
+                        
                         firstClick = false;
                         demineur = new GrilleJeu(10, 10, 10, fi, fj);
                         System.out.println(demineur.toString()); // temporaire
@@ -199,13 +196,16 @@ public class InterfaceFx extends Application {
                             lab.setMinWidth(size);
                             lab.setAlignment(Pos.CENTER);
                             lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                            //lab.setMouseTransparent(true);
                             //pane.getChildren().add(lab);
                             //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
+                            
 
                         }
 
                     } else if (e.getButton().equals(MouseButton.PRIMARY)) {
+                        
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         listUpdate.toString();
                         for (Cellule cel : listUpdate) {
@@ -219,37 +219,20 @@ public class InterfaceFx extends Application {
                         }
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
                         Cellule cFlag = demineur.flag(fi, fj);
-                        
+                        flag.setMouseTransparent(true);
+                        idk.setMouseTransparent(true);
                         switch (demineur.getGrilleExterieur()[fi][fj].getStatus()) {
                             // ça marche pas pour l'instant
                             case -2:
-
+                                
                                 jeu.add(flag, cFlag.getX(), cFlag.getY());
-                                /*flag.setOnMouseClicked(ef -> {
-                                    if (ef.getButton().equals(MouseButton.SECONDARY)) {
-                                        jeu.getChildren().remove(flag);
-                                        //Cellule tmpcel = demineur.flag(fi, fj);
-                                        jeu.add(idk, cFlag.getX(), cFlag.getY());
-                                        idk.setOnMouseClicked(ei -> {
-                                            if (ei.getButton().equals(MouseButton.SECONDARY)) {
-                                                jeu.getChildren().remove(idk);
-                                            }
-
-                                        });
-                                    }
-
-                                });*/
+                                
                                 break;
                             //on met ?
                             case -3:
                                 jeu.getChildren().remove(flag);
                                 jeu.add(idk, cFlag.getX(), cFlag.getY());
-                                /*idk.setOnMouseClicked(ei -> {
-                                    if (ei.getButton().equals(MouseButton.SECONDARY)) {
-                                        jeu.getChildren().remove(idk);
-                                    }
-
-                                });*/
+                                
                                 break;
                             //on recouvre
                             //jeu.setStyle("fx-img: ");
