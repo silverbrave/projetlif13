@@ -251,6 +251,8 @@ public class InterfaceFx extends Application {
                          {
                             // on affiche une fenetre et on bloque le reste
                              //juste un test de l'affichage
+                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
+                             
                             afficheFenetre(true);
                          }
                          
