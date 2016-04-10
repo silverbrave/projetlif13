@@ -10,6 +10,7 @@ import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,6 +22,8 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -68,7 +71,7 @@ public class InterfaceFx extends Application {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
-        //l'utilisateur choisit facile(15*15)
+            //l'utilisateur choisit facile(15*15)
             // System.out.println("Vous avez choisit : "+ result.get().getText());
             GrilleJeu griF = new GrilleJeu(10, 10, 10);
             nbL = 10;
@@ -141,6 +144,7 @@ public class InterfaceFx extends Application {
             for (int j = 0; j < nbL; j++) {
                 //addPane(i, j);
                 StackPane border = new StackPane();
+                //BorderPane border = new BorderPane();
                 Pane pane = new Pane();
 
                 Label nombre = new Label("0");
@@ -157,7 +161,7 @@ public class InterfaceFx extends Application {
                 flag.setPreserveRatio(true);
                 flag.setSmooth(true);
                 flag.setCache(true);
-                
+
                 Image img2 = new Image("images/idk.png");
                 ImageView idk = new ImageView(img2);
                 idk.setFitWidth(48);
@@ -167,8 +171,9 @@ public class InterfaceFx extends Application {
         //imgView.fitWidthProperty().bind(jeu.widthProperty()/colonnes); 
 
                 //jeu.setCenter(img);
-                StackPane.setMargin(pane, new Insets(1, 1, 1, 1));
+                StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
+                //border.setCenter(pane);
                 pane.setStyle("-fx-background-color: grey;");
                 // border.setStyle("-fx-background-color: black;");
                 InnerShadow shad = new InnerShadow();
@@ -214,18 +219,42 @@ public class InterfaceFx extends Application {
                         }
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
                         Cellule cFlag = demineur.flag(fi, fj);
+                        
                         switch (demineur.getGrilleExterieur()[fi][fj].getStatus()) {
-                        // ça marche pas pour l'instant
+                            // ça marche pas pour l'instant
                             case -2:
+
                                 jeu.add(flag, cFlag.getX(), cFlag.getY());
+                                /*flag.setOnMouseClicked(ef -> {
+                                    if (ef.getButton().equals(MouseButton.SECONDARY)) {
+                                        jeu.getChildren().remove(flag);
+                                        //Cellule tmpcel = demineur.flag(fi, fj);
+                                        jeu.add(idk, cFlag.getX(), cFlag.getY());
+                                        idk.setOnMouseClicked(ei -> {
+                                            if (ei.getButton().equals(MouseButton.SECONDARY)) {
+                                                jeu.getChildren().remove(idk);
+                                            }
+
+                                        });
+                                    }
+
+                                });*/
                                 break;
-                        //on met ?
+                            //on met ?
                             case -3:
+                                jeu.getChildren().remove(flag);
                                 jeu.add(idk, cFlag.getX(), cFlag.getY());
+                                /*idk.setOnMouseClicked(ei -> {
+                                    if (ei.getButton().equals(MouseButton.SECONDARY)) {
+                                        jeu.getChildren().remove(idk);
+                                    }
+
+                                });*/
                                 break;
-                        //on recouvre
-                        //jeu.setStyle("fx-img: ");
+                            //on recouvre
+                            //jeu.setStyle("fx-img: ");
                             case -5:
+                                jeu.getChildren().remove(idk);
                                 break;
                             default:
                                 break;
