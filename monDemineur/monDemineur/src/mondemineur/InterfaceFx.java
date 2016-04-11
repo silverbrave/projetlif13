@@ -182,6 +182,13 @@ public class InterfaceFx extends Application {
                 idk.setPreserveRatio(true);
                 idk.setSmooth(true);
                 idk.setCache(true);
+                
+                Image img4 = new Image("images/reveler.png");
+                ImageView revele = new ImageView(img4);
+                revele.setFitWidth(48);
+                revele.setPreserveRatio(true);
+                revele.setSmooth(true);
+                revele.setCache(true);
         //imgView.fitWidthProperty().bind(jeu.widthProperty()/colonnes); 
 
                 //jeu.setCenter(img);
@@ -204,11 +211,28 @@ public class InterfaceFx extends Application {
                         System.out.println(demineur.toString()); // temporaire
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         for (Cellule cel : listUpdate) {
-
-                            Label lab = new Label(Integer.toString(cel.getStatus()));
+                            String valLabel1 = Integer.toString(cel.getStatus());
+                          
+                            Label lab = new Label(valLabel1);
                             lab.setMinWidth(size);
                             lab.setAlignment(Pos.CENTER);
-                            lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                            switch(valLabel1){
+                                case "1":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: blue;");
+                                            break;
+                                 case "2":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: green;");
+                                            break;
+                                 case "3":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                            break;
+                                 case "4":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: purple;");
+                                            break;                
+                                 default: lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                            break;
+                            }
+                          //  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                             //pane.setStyle("-fx-background-color: white;");
+                             
+                          
+                             
                             //lab.setMouseTransparent(true);
                             //pane.getChildren().add(lab);
                             //jeu.getChildren().add(fi*fj, lab);
@@ -244,14 +268,28 @@ public class InterfaceFx extends Application {
                              //jeu.getChildren().add(fi*fj, lab);
                              jeu.add(lab, cel.getX(), cel.getY());                                
                              }*/ else {
-                                Label lab = new Label(Integer.toString(cel.getStatus()));
+                                 String valLabel2 = Integer.toString(cel.getStatus());
+                                Label lab = new Label(valLabel2);
                                 lab.setMinWidth(size);
                                 lab.setAlignment(Pos.CENTER);
-                                lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                
+                                  switch(valLabel2){
+                                case "1":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: blue;");
+                                            break;
+                                 case "2":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: green;");
+                                            break;
+                                 case "3":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                            break;
+                                 case "4":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: purple;");
+                                            break;                
+                                 default: lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                                            break;
+                            }
                                 //lab.setMouseTransparent(true);
                                 //pane.getChildren().add(lab);
                                 //jeu.getChildren().add(fi*fj, lab);
                                 jeu.add(lab, cel.getX(), cel.getY());
+                               
                             }
                         }
                         if (demineur.estFini(fi, fj)) {
