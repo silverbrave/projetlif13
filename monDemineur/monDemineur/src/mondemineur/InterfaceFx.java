@@ -7,6 +7,8 @@ package mondemineur;
 
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.scene.image.Image;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -27,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 /**
  *
@@ -39,6 +42,7 @@ public class InterfaceFx extends Application {
     boolean firstClick = true;
     GrilleJeu demineur;
     private int width, height;
+    private int tpsTimer;
 
     public static void main(String[] args) {
         launch(args);
@@ -50,7 +54,8 @@ public class InterfaceFx extends Application {
         int nbL = 0;
         //nb de colonnes pour la grille de l'interface
         int nbC = 0;
-        int nbB=0; // nb bombes
+        int nbB = 0; // nb bombes
+        tpsTimer = 0 ;
         //fenetre modale pour les lvl 
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Niveau de difficulté");
@@ -71,25 +76,25 @@ public class InterfaceFx extends Application {
             GrilleJeu griF = new GrilleJeu(10, 10, 10);
             nbL = 10;
             nbC = 10;
-            nbB = 10 ;
+            nbB = 10;
             width = 600;
             height = 700;
         } else if (result.get() == buttonTypeTwo) {
             //l'utilisateur choisit moyen(25*25)
-           
+
             GrilleJeu griM = new GrilleJeu(15, 15, 20);
             nbL = 15;
             nbC = 15;
-            nbB = 25 ;
+            nbB = 25;
             width = 900;
             height = 900;
         } else if (result.get() == buttonTypeThree) {
             //l'utilisateur choisit difficile(15*25)
-             //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
+            //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
             GrilleJeu griD = new GrilleJeu(17, 15, 40);
             nbL = 15;
             nbC = 25;
-            nbB = 80 ;
+            nbB = 80;
             width = 1400;
             height = 1000;
         } else {
@@ -183,10 +188,9 @@ public class InterfaceFx extends Application {
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
                 //border.setCenter(pane);
-                
-                //c est ici qu'il fallait modifier pour afficher ton image 
-             //   pane.setStyle("-fx-background-color: white;");
 
+                //c est ici qu'il fallait modifier pour afficher ton image 
+                //   pane.setStyle("-fx-background-color: white;");
                 final int fi = i;
                 final int fj = j;
                 final int fnbL = nbL;
@@ -210,14 +214,18 @@ public class InterfaceFx extends Application {
                             //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
 
+                            //le timer magique
+                            creTimer();
+                            
+
                         }
 
-                    } else if (e.getButton().equals(MouseButton.PRIMARY) && (demineur.getGrilleExterieur()[fi][fj].getStatus() == -5))  {
+                    } else if (e.getButton().equals(MouseButton.PRIMARY) && (demineur.getGrilleExterieur()[fi][fj].getStatus() == -5)) {
 
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         listUpdate.toString();
-                         for (Cellule cel : listUpdate) {
-                            if(cel.getStatus()==-1){
+                        for (Cellule cel : listUpdate) {
+                            if (cel.getStatus() == -1) {
                                 Image img3 = new Image("images/bombe.png");
                                 ImageView bombe = new ImageView(img3);
                                 bombe.setFitWidth(48);
@@ -225,18 +233,17 @@ public class InterfaceFx extends Application {
                                 bombe.setSmooth(true);
                                 bombe.setCache(true);
                                 jeu.add(bombe, cel.getX(), cel.getY());
-                                
+
                             }/*else if (cel.getStatus()==0){
-                                Label lab = new Label("");
-                                lab.setMinWidth(size);
-                                lab.setAlignment(Pos.CENTER);
-                                lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                                //lab.setMouseTransparent(true);
-                                //pane.getChildren().add(lab);
-                                //jeu.getChildren().add(fi*fj, lab);
-                                jeu.add(lab, cel.getX(), cel.getY());                                
-                            }*/
-                            else{
+                             Label lab = new Label("");
+                             lab.setMinWidth(size);
+                             lab.setAlignment(Pos.CENTER);
+                             lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
+                             //lab.setMouseTransparent(true);
+                             //pane.getChildren().add(lab);
+                             //jeu.getChildren().add(fi*fj, lab);
+                             jeu.add(lab, cel.getX(), cel.getY());                                
+                             }*/ else {
                                 Label lab = new Label(Integer.toString(cel.getStatus()));
                                 lab.setMinWidth(size);
                                 lab.setAlignment(Pos.CENTER);
@@ -244,18 +251,22 @@ public class InterfaceFx extends Application {
                                 //lab.setMouseTransparent(true);
                                 //pane.getChildren().add(lab);
                                 //jeu.getChildren().add(fi*fj, lab);
-                                jeu.add(lab, cel.getX(), cel.getY());                                
+                                jeu.add(lab, cel.getX(), cel.getY());
                             }
                         }
-                         if (demineur.estFini(fi, fj))
-                         {
+                        if (demineur.estFini(fi, fj)) {
                             // on affiche une fenetre et on bloque le reste
-                             //juste un test de l'affichage
-                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
-                             
-                            afficheFenetre(true);
-                         }
-                         
+                            //juste un test de l'affichage
+                            //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
+                            jeu.setDisable(true);
+                            if (demineur.gagne(fi, fj)) {
+                                afficheFenetre(true);
+                            } else {
+                                afficheFenetre(false);
+                            }
+
+                        }
+
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
                         Cellule cFlag = demineur.flag(fi, fj);
                         flag.setMouseTransparent(true);
@@ -281,12 +292,16 @@ public class InterfaceFx extends Application {
                             default:
                                 break;
                         }
-                        
-                        if (demineur.estFini(fi, fj))
-                         {
-                             // on affiche une fenetre et on bloque le reste
-                             
-                         }
+
+                        if (demineur.estFini(fi, fj)) {
+                            // on affiche une fenetre et on bloque le reste
+                            jeu.setDisable(true);
+                            if (demineur.gagne(fi, fj)) {
+                                afficheFenetre(true);
+                            } else {
+                                afficheFenetre(false);
+                            }
+                        }
                     }
 
                     //if (e.getButton().equals(MouseButton.SECONDARY)) {
@@ -323,17 +338,37 @@ public class InterfaceFx extends Application {
 
         //initialisation();
     }
-        //methode pour afficher une fenetre a la fin de la partie
-    public void afficheFenetre(boolean winner){
+
+    //methode pour afficher une fenetre a la fin de la partie
+
+    public void afficheFenetre(boolean winner) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Fin du jeu !");
         alert.setHeaderText(null);
-        if(winner){
-             alert.setContentText("GG, maintenant essaie avec un autre niveau");
-        }
-        else{
-             alert.setContentText("Dommage, retente ta chance!");
+        if (winner) {
+            alert.setContentText("GG, maintenant essaie avec un autre niveau");
+        } else {
+            alert.setContentText("Dommage, retente ta chance!");
         }
         alert.showAndWait();
+
     }
+    
+    public void creTimer()
+    {
+        Timer timer = new Timer();
+                            timer.scheduleAtFixedRate(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            tpsTimer ++;
+                                           System.out.println(tpsTimer);
+                                        }
+                                    });
+                                }
+                            }, 0, 1000);
+    }
+
 }

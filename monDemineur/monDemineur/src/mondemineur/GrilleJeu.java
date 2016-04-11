@@ -94,11 +94,11 @@ public class GrilleJeu {
 
     // retourne true si toutes les bombes ont été identifiés
     public boolean estFini(int l, int c) {
-        if (grille[l][c].getStatus() == BOMBE) {
+        if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG) {
             return true;
         } else if (celluleRestantes == 0) {
             return true;
-        } else if (flags > 0) {
+        } else if (flags == bombes) {
             for (int i = 0; i < lignes; i++) {
                 for (int j = 0; j < colonnes; j++) {
                     if (grilleExterieur[i][j].getStatus() == FLAG && grille[i][j].getStatus() != BOMBE) {
@@ -114,8 +114,25 @@ public class GrilleJeu {
         }
     }
     
-    public boolean gagne() {
-        return false ;
+    public boolean gagne(int l , int c) {
+        if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG) {
+            return false;
+        } else if (celluleRestantes == 0) {
+            return true;
+        } else if (flags == bombes) {
+            for (int i = 0; i < lignes; i++) {
+                for (int j = 0; j < colonnes; j++) {
+                    if (grilleExterieur[i][j].getStatus() == FLAG && grille[i][j].getStatus() != BOMBE) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
     public boolean doPointInterrogation() {
@@ -285,24 +302,5 @@ public class GrilleJeu {
         return s;
 
     }
-    public boolean gagne(int l , int c) {
-        if (grille[l][c].getStatus() == BOMBE) {
-            return false;
-        } else if (celluleRestantes == 0) {
-            return true;
-        } else if (flags > 0) {
-            for (int i = 0; i < lignes; i++) {
-                for (int j = 0; j < colonnes; j++) {
-                    if (grilleExterieur[i][j].getStatus() == FLAG && grille[i][j].getStatus() != BOMBE) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-
-        } else {
-            return false;
-        }
-    }
+    
 }
