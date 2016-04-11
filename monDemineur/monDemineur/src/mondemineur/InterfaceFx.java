@@ -30,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 
 /**
  *
@@ -121,19 +122,25 @@ public class InterfaceFx extends Application {
         Label label1 = new Label("Temps");
         label1.setTextAlignment(TextAlignment.CENTER);
 
-        Label label2 = new Label("Jouer");
-        label2.setTextAlignment(TextAlignment.CENTER);
-
+        /*Label label2 = new Label("Jouer");
+        label2.setTextAlignment(TextAlignment.CENTER);*/
+        Button btRestart = new Button("Restart");
+        btRestart.setAlignment(Pos.CENTER);
         Label label3 = new Label("Flags");
         label3.setTextAlignment(TextAlignment.CENTER);
 
         buttons.add(label1, 0, 0);
-        buttons.add(label2, 1, 0);
+        buttons.add(btRestart, 1, 0);
         buttons.add(label3, 2, 0);
 
         buttons.setGridLinesVisible(true);
         buttons.setAlignment(Pos.CENTER);
 
+        btRestart.setOnMouseClicked(e -> {
+            //apres le clic on appelle la methode pour restart le demineur
+            restart();
+        });
+        
         //IL Faut aligner les label au centre
         //Peut etre tenter de les mettre dans un autre composant...
         for (int i = 0; i < nbC; i++) {
@@ -216,31 +223,24 @@ public class InterfaceFx extends Application {
                             Label lab = new Label(valLabel1);
                             lab.setMinWidth(size);
                             lab.setAlignment(Pos.CENTER);
-                            switch(valLabel1){
-                                case "1":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: blue;");
-                                            break;
-                                 case "2":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: green;");
-                                            break;
-                                 case "3":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                                            break;
-                                 case "4":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: purple;");
-                                            break;                
-                                 default: lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                                            break;
-                            }
-                          //  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                             //pane.setStyle("-fx-background-color: white;");
-                             
-                          
+                           
+                                                    
+                           lab.setStyle(coloreNb(valLabel1));
+                           
+                           //  pane.setStyle("-fx-background-image: url(\"images/reveler.png\");");
+                            
+                          /*   pane.getChildren().remove(couverte);
+                             pane.getChildren().add(revele);*/
                              
                             //lab.setMouseTransparent(true);
                             //pane.getChildren().add(lab);
                             //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
-
+                            
+                          
                             //le timer magique
                             creTimer();
-                            
+                           
 
                         }
 
@@ -273,18 +273,10 @@ public class InterfaceFx extends Application {
                                 lab.setMinWidth(size);
                                 lab.setAlignment(Pos.CENTER);
                                 
-                                  switch(valLabel2){
-                                case "1":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: blue;");
-                                            break;
-                                 case "2":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: green;");
-                                            break;
-                                 case "3":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                                            break;
-                                 case "4":  lab.setStyle("-fx-font: 40 arial; -fx-text-fill: purple;");
-                                            break;                
-                                 default: lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                                            break;
-                            }
+                                 lab.setStyle(coloreNb(valLabel2));
+                                 
+                                 // pane.getChildren().remove(couverte);
+                                  // pane.getChildren().add(revele);
                                 //lab.setMouseTransparent(true);
                                 //pane.getChildren().add(lab);
                                 //jeu.getChildren().add(fi*fj, lab);
@@ -409,4 +401,25 @@ public class InterfaceFx extends Application {
                             }, 0, 1000);
     }
 
+    public void restart(){
+        System.out.println("YOLO TU VEUX RECOMMENCER ?");
+        //TODO 
+        // voir si on relance l'appli (je pense tres dure a implementer)
+        //soit tout reset et reafficher la fenetre avec les difficultes?
+    }
+    
+    public String coloreNb(String valLab){
+         switch(valLab){
+                                case "1": return "-fx-font: 40 arial; -fx-text-fill: blue;";
+                                            
+                                 case "2": return "-fx-font: 40 arial; -fx-text-fill: green;";
+                                          
+                                 case "3": return "-fx-font: 40 arial; -fx-text-fill: red;";
+                                            
+                                 case "4": return "-fx-font: 40 arial; -fx-text-fill: purple;";
+                                                          
+                                 default: return "-fx-font: 40 arial; -fx-text-fill: red;";
+                                          
+                            }
+    }
 }
