@@ -94,9 +94,9 @@ public class GrilleJeu {
 
     // retourne true si toutes les bombes ont été identifiés
     public boolean estFini(int l, int c) {
-        if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG) {
+        if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG && grilleExterieur[l][c].getStatus() != IDK && grilleExterieur[l][c].getStatus() != COUVERTE) {
             return true;
-        } else if (celluleRestantes == 0) {
+        } else if (celluleRestantes == 0 && flags == bombes) {
             return true;
         } else if (flags == bombes) {
             for (int i = 0; i < lignes; i++) {
@@ -115,9 +115,9 @@ public class GrilleJeu {
     }
     
     public boolean gagne(int l , int c) {
-        if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG) {
+        if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG && grilleExterieur[l][c].getStatus() != IDK && grilleExterieur[l][c].getStatus() != COUVERTE) {
             return false;
-        } else if (celluleRestantes == 0) {
+        } else if (celluleRestantes == 0 && flags == bombes) {
             return true;
         } else if (flags == bombes) {
             for (int i = 0; i < lignes; i++) {
@@ -293,9 +293,9 @@ public class GrilleJeu {
     @Override
     public String toString() {
         String s = "";
-        for (int i = 0; i < lignes; i++) {
-            for (int j = 0; j < colonnes; j++) {
-                s = s + grille[i][j].toString() + " ";
+        for (int i = 0; i < colonnes; i++) {
+            for (int j = 0; j < lignes; j++) {
+                s = s + grille[j][i].toString() + " ";
             }
             s = s + "\n";
         }
