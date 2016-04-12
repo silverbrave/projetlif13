@@ -112,7 +112,7 @@ public class InterfaceFx extends Application {
         buttons.setAlignment(Pos.CENTER);
 
         btRestart.setOnMouseClicked(e -> {
-            restart();
+            restart(stage);
         });
 
         for (int i = 0; i < nbC; i++) {
@@ -501,10 +501,23 @@ public class InterfaceFx extends Application {
         return timer;
     }
 
-    public void restart() {
+    public void restart(Stage stage) {
         System.out.println("TU VEUX RECOMMENCER ?");
-        afficheFenetreDifficulte();
+        jeu.getChildren().clear();
+        jeu = new GridPane();
+         // demineur=;
+         firstClick = true;
+           GrilleJeu demineur;
+    
+            tpsTimer = 0;
 
+    //nb de lignes pour la grille de l'interface
+            nbL = 0;
+    //nb de colonnes pour la grille de l'interface
+             nbC = 0;
+                nbB = 0; // nb bombes
+         hardcore = false;
+         start(stage);
         //TODO 
         // voir si on relance l'appli (je pense tres dure a implementer)
         //soit tout reset et reafficher la fenetre avec les difficultes?
