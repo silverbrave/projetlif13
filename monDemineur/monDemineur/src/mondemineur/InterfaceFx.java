@@ -31,6 +31,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -44,63 +45,21 @@ public class InterfaceFx extends Application {
     GrilleJeu demineur;
     private int width, height;
     private int tpsTimer;
-
+      //nb de lignes pour la grille de l'interface
+    private int nbL = 0;
+        //nb de colonnes pour la grille de l'interface
+    private int nbC = 0;
+    private int nbB = 0; // nb bombes
+    
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) {
-        //nb de lignes pour la grille de l'interface
-        int nbL = 0;
-        //nb de colonnes pour la grille de l'interface
-        int nbC = 0;
-        int nbB = 0; // nb bombes
+      
         tpsTimer = 0 ;
-        //fenetre modale pour les lvl 
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Niveau de difficulté");
-        alert.setHeaderText("Choisir un niveau de difficulté");
-        //  alert.setContentText("Choose your option.");
-
-        ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
-        ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
-        ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
-        // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeOne) {
-            //l'utilisateur choisit facile(15*15)
-            // System.out.println("Vous avez choisit : "+ result.get().getText());
-            GrilleJeu griF = new GrilleJeu(10, 10, 10);
-            nbL = 10;
-            nbC = 10;
-            nbB = 10;
-            width = 600;
-            height = 700;
-        } else if (result.get() == buttonTypeTwo) {
-            //l'utilisateur choisit moyen(25*25)
-
-            GrilleJeu griM = new GrilleJeu(15, 15, 20);
-            nbL = 15;
-            nbC = 15;
-            nbB = 25;
-            width = 900;
-            height = 900;
-        } else if (result.get() == buttonTypeThree) {
-            //l'utilisateur choisit difficile(15*25)
-            //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
-            GrilleJeu griD = new GrilleJeu(17, 15, 40);
-            nbL = 15;
-            nbC = 25;
-            nbB = 80;
-            width = 1400;
-            height = 1000;
-        } else {
-            // pb rage quit 
-        }
+        afficheFenetreDifficulte();
 
         stage.setTitle("Demineur");
         stage.setWidth(width);
@@ -290,9 +249,9 @@ public class InterfaceFx extends Application {
                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
                             jeu.setDisable(true);
                             if (demineur.gagne(fi, fj)) {
-                                afficheFenetre(true);
+                                afficheFenetreFin(true);
                             } else {
-                                afficheFenetre(false);
+                                afficheFenetreFin(false);
                             }
 
                         }
@@ -327,9 +286,9 @@ public class InterfaceFx extends Application {
                             // on affiche une fenetre et on bloque le reste
                             jeu.setDisable(true);
                             if (demineur.gagne(fi, fj)) {
-                                afficheFenetre(true);
+                                afficheFenetreFin(true);
                             } else {
-                                afficheFenetre(false);
+                                afficheFenetreFin(false);
                             }
                         }
                     }
@@ -371,7 +330,7 @@ public class InterfaceFx extends Application {
 
     //methode pour afficher une fenetre a la fin de la partie
 
-    public void afficheFenetre(boolean winner) {
+    public void afficheFenetreFin(boolean winner) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Fin du jeu !");
         alert.setHeaderText(null);
@@ -382,6 +341,53 @@ public class InterfaceFx extends Application {
         }
         alert.showAndWait();
 
+    }
+    
+    public void afficheFenetreDifficulte(){
+         //fenetre modale pour les lvl 
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Niveau de difficulté");
+        alert.setHeaderText("Choisir un niveau de difficulté");
+        //  alert.setContentText("Choose your option.");
+
+        ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
+        ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
+        ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
+        // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOne) {
+            //l'utilisateur choisit facile(15*15)
+            // System.out.println("Vous avez choisit : "+ result.get().getText());
+            GrilleJeu griF = new GrilleJeu(10, 10, 10);
+            nbL = 10;
+            nbC = 10;
+            nbB = 10;
+            width = 600;
+            height = 700;
+        } else if (result.get() == buttonTypeTwo) {
+            //l'utilisateur choisit moyen(25*25)
+
+            GrilleJeu griM = new GrilleJeu(15, 15, 20);
+            nbL = 15;
+            nbC = 15;
+            nbB = 25;
+            width = 900;
+            height = 900;
+        } else if (result.get() == buttonTypeThree) {
+            //l'utilisateur choisit difficile(15*25)
+            //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
+            GrilleJeu griD = new GrilleJeu(17, 15, 40);
+            nbL = 15;
+            nbC = 25;
+            nbB = 80;
+            width = 1400;
+            height = 1000;
+        } else {
+            // pb rage quit 
+        }
     }
     
     public void creTimer()
@@ -403,9 +409,14 @@ public class InterfaceFx extends Application {
 
     public void restart(){
         System.out.println("YOLO TU VEUX RECOMMENCER ?");
+        afficheFenetreDifficulte();
+        
         //TODO 
         // voir si on relance l'appli (je pense tres dure a implementer)
         //soit tout reset et reafficher la fenetre avec les difficultes?
+       
+        
+       
     }
     
     public String coloreNb(String valLab){
