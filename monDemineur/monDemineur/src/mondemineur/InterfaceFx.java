@@ -44,7 +44,7 @@ import static mondemineur.GrilleJeu.BOMBE;
 
 /**
  *
- * @author Florian
+ * @author Florian Hugo et Kevin
  */
 public class InterfaceFx extends Application {
 
@@ -98,8 +98,6 @@ public class InterfaceFx extends Application {
         label1 = new Label("Temps: 0");
         label1.setTextAlignment(TextAlignment.CENTER);
 
-        /*Label label2 = new Label("Jouer");
-         label2.setTextAlignment(TextAlignment.CENTER);*/
         btRestart = new Button("Restart");
         btRestart.setAlignment(Pos.CENTER);
         label3 = new Label("Bombes: " + nbB);
@@ -113,13 +111,9 @@ public class InterfaceFx extends Application {
         buttons.setAlignment(Pos.CENTER);
 
         btRestart.setOnMouseClicked(e -> {
-            //apres le clic on appelle la methode pour restart le demineur
             restart();
         });
 
-        //= creTimer();
-        //IL Faut aligner les label au centre
-        //Peut etre tenter de les mettre dans un autre composant...
         for (int i = 0; i < nbC; i++) {
             ColumnConstraints column = new ColumnConstraints(size);
             jeu.getColumnConstraints().add(column);
@@ -134,9 +128,8 @@ public class InterfaceFx extends Application {
 
         for (int i = 0; i < nbC; i++) {
             for (int j = 0; j < nbL; j++) {
-                //addPane(i, j);
+
                 StackPane border = new StackPane();
-                //BorderPane border = new BorderPane();
                 Pane pane = new Pane();
 
                 Label nombre = new Label("0");
@@ -154,7 +147,7 @@ public class InterfaceFx extends Application {
                 couverte.setSmooth(true);
                 couverte.setCache(true);
 
-                jeu.add(couverte, i, j);//POURQUOI CA MARCHE PAS CA MET DES IMAGES BLANCHES SUR TOUTES LES CASES
+                jeu.add(couverte, i, j);
 
                 Image img = new Image("images/flag.jpg");
                 ImageView flag = new ImageView(img);
@@ -176,15 +169,10 @@ public class InterfaceFx extends Application {
                 revele.setPreserveRatio(true);
                 revele.setSmooth(true);
                 revele.setCache(true);
-        //imgView.fitWidthProperty().bind(jeu.widthProperty()/colonnes); 
 
-                //jeu.setCenter(img);
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
-                //border.setCenter(pane);
 
-                //c est ici qu'il fallait modifier pour afficher ton image 
-                //   pane.setStyle("-fx-background-color: white;");
                 final int fi = i;
                 final int fj = j;
                 final int fnbL = nbL;
@@ -210,16 +198,7 @@ public class InterfaceFx extends Application {
 
                             lab.setStyle(coloreNb(valLabel1));
 
-                           //  pane.setStyle("-fx-background-image: url(\"images/reveler.png\");");
-                            /*   pane.getChildren().remove(couverte);
-                             pane.getChildren().add(revele);*/
-                            //lab.setMouseTransparent(true);
-                            //pane.getChildren().add(lab);
-                            //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
-
-                            //le timer magique
-                            //creTimer();
                         }
                         leTimer = creTimer();
                         if (hardcore) {
@@ -240,16 +219,7 @@ public class InterfaceFx extends Application {
                                 bombe.setCache(true);
                                 jeu.add(bombe, cel.getX(), cel.getY());
 
-                            }/*else if (cel.getStatus()==0){
-                             Label lab = new Label("");
-                             lab.setMinWidth(size);
-                             lab.setAlignment(Pos.CENTER);
-                             lab.setStyle("-fx-font: 40 arial; -fx-text-fill: red;");
-                             //lab.setMouseTransparent(true);
-                             //pane.getChildren().add(lab);
-                             //jeu.getChildren().add(fi*fj, lab);
-                             jeu.add(lab, cel.getX(), cel.getY());                                
-                             }*/ else {
+                            }else {
                                 String valLabel2 = Integer.toString(cel.getStatus());
                                 Label lab = new Label(valLabel2);
                                 lab.setMinWidth(size);
@@ -257,11 +227,6 @@ public class InterfaceFx extends Application {
 
                                 lab.setStyle(coloreNb(valLabel2));
 
-                                // pane.getChildren().remove(couverte);
-                                // pane.getChildren().add(revele);
-                                //lab.setMouseTransparent(true);
-                                //pane.getChildren().add(lab);
-                                //jeu.getChildren().add(fi*fj, lab);
                                 jeu.add(lab, cel.getX(), cel.getY());
 
                             }
@@ -272,7 +237,7 @@ public class InterfaceFx extends Application {
                             // on affiche une fenetre et on bloque le reste
                             //juste un test de l'affichage
                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
-                            timerX.cancel();
+                            if (hardcore) {timerX.cancel();}
                             jeu.setDisable(true);
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
@@ -314,9 +279,12 @@ public class InterfaceFx extends Application {
                         }
                         if (hardcore) {timerX = TimerAleatoire();}
                         if (demineur.estFini(fi, fj)) {
-                            timerX.cancel();
+                            if(hardcore){
+                                timerX.cancel();
+                            }
                             // on affiche une fenetre et on bloque le reste
                             jeu.setDisable(true);
+                            
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
                                 //on serialise le score
@@ -328,25 +296,6 @@ public class InterfaceFx extends Application {
                             }
                         }
                     }
-
-                    //if (e.getButton().equals(MouseButton.SECONDARY)) {
-                    //System.out.println(pane.getChildren());
-                        /*if (pane.getChildren().contains(imgView)) {
-                     pane.getChildren().remove(imgView);
-                     } else {
-                     imgView.relocate(0, 0);
-                     pane.getChildren().addAll(imgView);
-                     }*/
-                        //System.out.println("Clicked on row = " + i + " and colum  = " + j);
-                    //} else {
-                    //System.out.printf("Mouse enetered cell [%d, %d]%n", i, j);
-                        /*nombre.setVisible(true);
-                     pane.setDisable(true);
-                     pane.setStyle("-fx-background-color: white");
-                     if (pane.getChildren().contains(imgView)) {
-                     pane.getChildren().remove(imgView);
-                     }*/
-                    //}
                 });
                 jeu.add(border, i, j);
             }
@@ -383,30 +332,24 @@ public class InterfaceFx extends Application {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Niveau de difficulté");
         alert.setHeaderText("Choisir un niveau de difficulté");
-        //  alert.setContentText("Choose your option.");
-
+        
         ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
         ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
         ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
         ButtonType buttonTypeFour = new ButtonType("Personnaliser");
-        // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeFour);
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
-            //l'utilisateur choisit facile(15*15)
-            // System.out.println("Vous avez choisit : "+ result.get().getText());
-            //GrilleJeu griF = new GrilleJeu(10, 10, 10);
+            //facile
             nbL = 10;
             nbC = 10;
             nbB = 10;
             width = nbC * 55;
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeTwo) {
-            //l'utilisateur choisit moyen(25*25)
-
-            //GrilleJeu griM = new GrilleJeu(15, 15, 20);
+            //moyen
             nbL = 15;
             nbC = 15;
             nbB = 25;
@@ -416,9 +359,7 @@ public class InterfaceFx extends Application {
             }
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeThree) {
-            //l'utilisateur choisit difficile(15*25)
-            //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
-            //GrilleJeu griD = new GrilleJeu(15, 25, 60);
+            //difficile
             nbL = 15;
             nbC = 25;
             nbB = 80;
@@ -529,7 +470,7 @@ public class InterfaceFx extends Application {
     }
 
     public void restart() {
-        System.out.println("YOLO TU VEUX RECOMMENCER ?");
+        System.out.println("TU VEUX RECOMMENCER ?");
         afficheFenetreDifficulte();
 
         //TODO 
@@ -572,7 +513,9 @@ public class InterfaceFx extends Application {
     @Override
     public void stop() {
         leTimer.cancel();
-        timerX.cancel();
+        if(hardcore){
+            timerX.cancel();
+        }
 
     }
 

@@ -7,7 +7,7 @@ package mondemineur;
 
 /**
  *
- * @author Hugo Paris
+ * @author Florian Hugo et Kevin
  */
 public class Cellule {
     int _x, _y;

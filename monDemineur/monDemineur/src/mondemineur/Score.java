@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Kevin
+ * @author Florian Hugo et Kevin
  */
 public class Score implements Serializable {
 

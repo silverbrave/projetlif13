@@ -7,18 +7,12 @@ package mondemineur;
 
 /**
  *
- * @author Kevin
+ * @author Florian Hugo et Kevin
  */
-/*
-CREER UNE NOUVELLE CLASSE DANS LE PACKAGE
- */
+
  
 import javafx.scene.control.TextField;
- 
-/**
- *
- * @author Hugo Paris
- */
+
 public class NumberTextField extends TextField
 {
  

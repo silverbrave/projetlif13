@@ -12,7 +12,7 @@ import java.util.Random;
 
 /**
  *
- * @author Hugo Paris
+ * @author Florian Hugo et Kevin
  */
 public class GrilleJeu {
 
@@ -30,10 +30,7 @@ public class GrilleJeu {
 
     //La cellule n'est pas encore découverte.
     public static final int COUVERTE = -5;
-
-    //La cellule est flaggé sans y avoir de bombe dessous.
-    public static final int WRONGFLAG = -8;
-
+    
     //La cellule contient une bombe qui a explosée.
     public static final int EXPLODE = -9;
 
