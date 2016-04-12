@@ -5,18 +5,14 @@
  */
 package mondemineur;
 
-import java.beans.XMLEncoder;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.image.Image;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -37,8 +33,14 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import static javafx.application.Application.launch;
+import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.input.MouseEvent;
+import static mondemineur.GrilleJeu.BOMBE;
 
 /**
  *
@@ -53,6 +55,7 @@ public class InterfaceFx extends Application {
     private int width, height;
     private int tpsTimer = 0;
     private Timer leTimer;
+    private Timer timerX;
     //nb de lignes pour la grille de l'interface
     private int nbL = 0;
     //nb de colonnes pour la grille de l'interface
@@ -60,7 +63,10 @@ public class InterfaceFx extends Application {
     private int nbB = 0; // nb bombes
     private Label label1;
     private Label label3;
-    private int level ;
+    private int level;
+    private boolean hardcore = false;
+    private Button btRestart;
+    private Pane[][] paneArray;
 
     public static void main(String[] args) {
         launch(args);
@@ -94,9 +100,9 @@ public class InterfaceFx extends Application {
 
         /*Label label2 = new Label("Jouer");
          label2.setTextAlignment(TextAlignment.CENTER);*/
-        Button btRestart = new Button("Restart");
+        btRestart = new Button("Restart");
         btRestart.setAlignment(Pos.CENTER);
-        label3 = new Label("Bombes: "+ nbB);
+        label3 = new Label("Bombes: " + nbB);
         label3.setTextAlignment(TextAlignment.CENTER);
 
         buttons.add(label1, 0, 0);
@@ -110,10 +116,8 @@ public class InterfaceFx extends Application {
             //apres le clic on appelle la methode pour restart le demineur
             restart();
         });
-        
-         //= creTimer();
-        
 
+        //= creTimer();
         //IL Faut aligner les label au centre
         //Peut etre tenter de les mettre dans un autre composant...
         for (int i = 0; i < nbC; i++) {
@@ -123,6 +127,9 @@ public class InterfaceFx extends Application {
         for (int i = 0; i < nbL; i++) {
             RowConstraints row = new RowConstraints(size);
             jeu.getRowConstraints().add(row);
+        }
+        if (hardcore) {
+            paneArray = new Pane[nbL][nbC];
         }
 
         for (int i = 0; i < nbC; i++) {
@@ -175,8 +182,6 @@ public class InterfaceFx extends Application {
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
                 //border.setCenter(pane);
-                   
-                
 
                 //c est ici qu'il fallait modifier pour afficher ton image 
                 //   pane.setStyle("-fx-background-color: white;");
@@ -185,6 +190,10 @@ public class InterfaceFx extends Application {
                 final int fnbL = nbL;
                 final int fnbC = nbC;
                 final int fnbB = nbB;
+                if (hardcore) {
+                    paneArray[i][j] = pane;
+                }
+
                 pane.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY) && firstClick) {
 
@@ -208,15 +217,17 @@ public class InterfaceFx extends Application {
                             //pane.getChildren().add(lab);
                             //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
-                            
+
                             //le timer magique
                             //creTimer();
-
                         }
                         leTimer = creTimer();
+                        if (hardcore) {
+                        timerX = TimerAleatoire();
+                        }
 
                     } else if (e.getButton().equals(MouseButton.PRIMARY) && (demineur.getGrilleExterieur()[fi][fj].getStatus() == -5)) {
-
+                        if (hardcore) {timerX.cancel();}
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         listUpdate.toString();
                         for (Cellule cel : listUpdate) {
@@ -246,25 +257,27 @@ public class InterfaceFx extends Application {
 
                                 lab.setStyle(coloreNb(valLabel2));
 
-                                 // pane.getChildren().remove(couverte);
+                                // pane.getChildren().remove(couverte);
                                 // pane.getChildren().add(revele);
                                 //lab.setMouseTransparent(true);
                                 //pane.getChildren().add(lab);
                                 //jeu.getChildren().add(fi*fj, lab);
                                 jeu.add(lab, cel.getX(), cel.getY());
-                                
 
                             }
                         }
+
+                        if (hardcore) {timerX = TimerAleatoire();}
                         if (demineur.estFini(fi, fj)) {
                             // on affiche une fenetre et on bloque le reste
                             //juste un test de l'affichage
                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
+                            timerX.cancel();
                             jeu.setDisable(true);
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
                                 //on serialise le score
-                                Score sc = new Score(level , tpsTimer);
+                                Score sc = new Score(level, tpsTimer);
                                 sc.updateBestScore();
                                 afficheFenetreFin(true);
                             } else {
@@ -274,6 +287,7 @@ public class InterfaceFx extends Application {
                         }
 
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
+                        if (hardcore) {timerX.cancel();}
                         Cellule cFlag = demineur.flag(fi, fj);
                         flag.setMouseTransparent(true);
                         idk.setMouseTransparent(true);
@@ -298,14 +312,15 @@ public class InterfaceFx extends Application {
                             default:
                                 break;
                         }
-
+                        if (hardcore) {timerX = TimerAleatoire();}
                         if (demineur.estFini(fi, fj)) {
+                            timerX.cancel();
                             // on affiche une fenetre et on bloque le reste
                             jeu.setDisable(true);
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
                                 //on serialise le score
-                                Score sc = new Score(level , tpsTimer);
+                                Score sc = new Score(level, tpsTimer);
                                 sc.updateBestScore();
                                 afficheFenetreFin(true);
                             } else {
@@ -355,29 +370,29 @@ public class InterfaceFx extends Application {
         alert.setTitle("Fin du jeu !");
         alert.setHeaderText(null);
         if (winner) {
-            alert.setContentText("Vous avez gagné en : "+tpsTimer+ " secondes");
+            alert.setContentText("Vous avez gagné en : " + tpsTimer + " secondes");
         } else {
             alert.setContentText("Dommage, retente ta chance!");
         }
         alert.showAndWait();
 
     }
-    
+
     public void afficheFenetreDifficulte() {
         //fenetre modale pour les lvl
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Niveau de difficulté");
         alert.setHeaderText("Choisir un niveau de difficulté");
         //  alert.setContentText("Choose your option.");
- 
+
         ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
         ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
         ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
         ButtonType buttonTypeFour = new ButtonType("Personnaliser");
         // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
- 
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree,buttonTypeFour);
- 
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeFour);
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
             //l'utilisateur choisit facile(15*15)
@@ -390,12 +405,15 @@ public class InterfaceFx extends Application {
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeTwo) {
             //l'utilisateur choisit moyen(25*25)
- 
+
             //GrilleJeu griM = new GrilleJeu(15, 15, 20);
             nbL = 15;
             nbC = 15;
             nbB = 25;
             width = nbC * 55;
+            if (width < 500) {
+                width = 500;
+            }
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeThree) {
             //l'utilisateur choisit difficile(15*25)
@@ -405,63 +423,108 @@ public class InterfaceFx extends Application {
             nbC = 25;
             nbB = 80;
             width = nbC * 55;
+            if (width < 500) {
+                width = 500;
+            }
             height = nbL * 55 + 150;
-        }else if (result.get() == buttonTypeFour) {
+        } else if (result.get() == buttonTypeFour) {
             Dialog<int[]> dialog = new Dialog<>();
             dialog.setTitle("Difficulté personnalisée");
             dialog.setHeaderText("Choisissez les paramètres :");
             dialog.setResizable(true);
- 
+
             Label label1 = new Label("Lignes: (max.15) ");
             Label label2 = new Label("Colonnes: (max.20) ");
             Label label3 = new Label("Nombre de bombes: (<L*C) ");
+            Label label4 = new Label("Mode hardcore :");
+            
+            CheckBox cb = new CheckBox();
+            
+ 
+            
+            
+            
             NumberTextField text1 = new NumberTextField();
             NumberTextField text2 = new NumberTextField();
             NumberTextField text3 = new NumberTextField();
- 
+
             GridPane grid = new GridPane();
             grid.add(label1, 1, 1);
-            grid.add(text1, 3, 1);
+            grid.add(text1, 4, 1);
             grid.add(label2, 1, 2);
-            grid.add(text2, 3, 2);
+            grid.add(text2, 4, 2);
             grid.add(label3, 1, 3);
-            grid.add(text3, 3, 3);
+            grid.add(text3, 4, 3);
+            grid.add(label4, 1, 4);
+            grid.add(cb, 4, 4);
             dialog.getDialogPane().setContent(grid);
- 
+
             ButtonType buttonTypeOk = new ButtonType("Okay", ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
- 
+
             Optional<int[]> result2 = dialog.showAndWait();
- 
+
             nbL = Integer.parseInt(text1.getText());
-            if(nbL>15){nbL=15;}
+            if (nbL > 15) {
+                nbL = 15;
+            }
             nbC = Integer.parseInt(text2.getText());
-            if(nbC>20){nbC=20;}
+            if (nbC > 20) {
+                nbC = 20;
+            }
             nbB = Integer.parseInt(text3.getText());
             width = nbC * 55;
+            if (width < 500) {
+                width = 500;
+            }
             height = nbL * 55 + 150;
-        }else {
+            hardcore = cb.isSelected();
+        } else {
             // pb rage quit
         }
     }
 
-    
-
     public Timer creTimer() {
         Timer timer = new Timer();
-         timer.scheduleAtFixedRate(new TimerTask() {
-         @Override
-         public void run() {
-         Platform.runLater(new Runnable() {
-         @Override
-         public void run() {
-         tpsTimer ++;
-         //System.out.println(tpsTimer);
-         label1.setText("Temps : " +tpsTimer);
-         }
-         });
-         }
-         }, 0, 1000);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tpsTimer++;
+                        //System.out.println(tpsTimer);
+                        label1.setText("Temps : " + tpsTimer);
+                    }
+                });
+            }
+        }, 0, 1000);
+        return timer;
+    }
+
+    public Timer TimerAleatoire() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Random random = new Random(System.currentTimeMillis());
+                        int lx = Math.abs(random.nextInt() % nbL);
+                        int cx = Math.abs(random.nextInt() % nbC);
+
+                        while (demineur.getGrilleExterieur()[lx][cx].getStatus() != -5) {
+                            lx = Math.abs(random.nextInt() % nbL);
+                            cx = Math.abs(random.nextInt() % nbC);
+                        }
+
+                        Event.fireEvent(paneArray[lx][cx], new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true, true, true, true, true, true, true, null));
+                        System.out.println("Clique");
+                    }
+                });
+            }
+        }, 5000, 5000);
         return timer;
     }
 
@@ -505,12 +568,20 @@ public class InterfaceFx extends Application {
 
         }
     }
-    
-    
-    
+
     @Override
-    public void stop(){
-       leTimer.cancel();
-       
+    public void stop() {
+        leTimer.cancel();
+        timerX.cancel();
+
+    }
+
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
+            }
+        }
+        return null;
     }
 }
