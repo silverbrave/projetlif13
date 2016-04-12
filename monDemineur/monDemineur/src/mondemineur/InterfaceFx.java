@@ -39,6 +39,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import static mondemineur.GrilleJeu.BOMBE;
 
@@ -202,11 +203,13 @@ public class InterfaceFx extends Application {
                         }
                         leTimer = creTimer();
                         if (hardcore) {
-                        timerX = TimerAleatoire();
+                            timerX = TimerAleatoire();
                         }
 
                     } else if (e.getButton().equals(MouseButton.PRIMARY) && (demineur.getGrilleExterieur()[fi][fj].getStatus() == -5)) {
-                        if (hardcore) {timerX.cancel();}
+                        if (hardcore) {
+                            timerX.cancel();
+                        }
                         LinkedList<Cellule> listUpdate = new LinkedList(demineur.revele(fi, fj));
                         listUpdate.toString();
                         for (Cellule cel : listUpdate) {
@@ -219,7 +222,7 @@ public class InterfaceFx extends Application {
                                 bombe.setCache(true);
                                 jeu.add(bombe, cel.getX(), cel.getY());
 
-                            }else {
+                            } else {
                                 String valLabel2 = Integer.toString(cel.getStatus());
                                 Label lab = new Label(valLabel2);
                                 lab.setMinWidth(size);
@@ -232,12 +235,16 @@ public class InterfaceFx extends Application {
                             }
                         }
 
-                        if (hardcore) {timerX = TimerAleatoire();}
+                        if (hardcore) {
+                            timerX = TimerAleatoire();
+                        }
                         if (demineur.estFini(fi, fj)) {
                             // on affiche une fenetre et on bloque le reste
                             //juste un test de l'affichage
                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
-                            if (hardcore) {timerX.cancel();}
+                            if (hardcore) {
+                                timerX.cancel();
+                            }
                             jeu.setDisable(true);
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
@@ -252,7 +259,9 @@ public class InterfaceFx extends Application {
                         }
 
                     } else if (e.getButton().equals(MouseButton.SECONDARY) && !firstClick) {
-                        if (hardcore) {timerX.cancel();}
+                        if (hardcore) {
+                            timerX.cancel();
+                        }
                         Cellule cFlag = demineur.flag(fi, fj);
                         flag.setMouseTransparent(true);
                         idk.setMouseTransparent(true);
@@ -277,14 +286,16 @@ public class InterfaceFx extends Application {
                             default:
                                 break;
                         }
-                        if (hardcore) {timerX = TimerAleatoire();}
+                        if (hardcore) {
+                            timerX = TimerAleatoire();
+                        }
                         if (demineur.estFini(fi, fj)) {
-                            if(hardcore){
+                            if (hardcore) {
                                 timerX.cancel();
                             }
                             // on affiche une fenetre et on bloque le reste
                             jeu.setDisable(true);
-                            
+
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
                                 //on serialise le score
@@ -315,16 +326,41 @@ public class InterfaceFx extends Application {
 
     //methode pour afficher une fenetre a la fin de la partie
     public void afficheFenetreFin(boolean winner) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Fin du jeu !");
-        alert.setHeaderText(null);
-        if (winner) {
-            alert.setContentText("Vous avez gagné en : " + tpsTimer + " secondes");
-        } else {
-            alert.setContentText("Dommage, retente ta chance!");
-        }
-        alert.showAndWait();
 
+        if (winner) {
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Partie terminée !");
+            dialog.setHeaderText("Bien joué ! Vous avez gagné en : " + tpsTimer + " secondes");
+            dialog.setResizable(true);
+
+            Label label1 = new Label("Entrez votre pseudo: ");
+
+            TextField text1 = new TextField();
+
+            GridPane grid = new GridPane();
+            grid.add(label1, 1, 1);
+            grid.add(text1, 2, 1);
+
+            dialog.getDialogPane().setContent(grid);
+
+            ButtonType buttonTypeOk = new ButtonType("Enregistrer score", ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+
+            Optional<String> result2 = dialog.showAndWait();
+            String pseudo = text1.getText();
+            System.out.println(pseudo);
+            
+            // TODO
+            /*
+            enregistrerScore(pseudo,tpsTimer);
+            */
+        } else {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Partie terminée !");
+            alert.setHeaderText(null);
+            alert.setContentText("Dommage, retente ta chance!");
+            alert.showAndWait();
+        }
     }
 
     public void afficheFenetreDifficulte() {
@@ -332,7 +368,7 @@ public class InterfaceFx extends Application {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Niveau de difficulté");
         alert.setHeaderText("Choisir un niveau de difficulté");
-        
+
         ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
         ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
         ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
@@ -378,13 +414,9 @@ public class InterfaceFx extends Application {
             Label label2 = new Label("Colonnes: (max.20) ");
             Label label3 = new Label("Nombre de bombes: (<L*C) ");
             Label label4 = new Label("Mode hardcore :");
-            
+
             CheckBox cb = new CheckBox();
-            
- 
-            
-            
-            
+
             NumberTextField text1 = new NumberTextField();
             NumberTextField text2 = new NumberTextField();
             NumberTextField text3 = new NumberTextField();
@@ -513,7 +545,7 @@ public class InterfaceFx extends Application {
     @Override
     public void stop() {
         leTimer.cancel();
-        if(hardcore){
+        if (hardcore) {
             timerX.cancel();
         }
 
