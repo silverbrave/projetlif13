@@ -5,10 +5,15 @@
  */
 package mondemineur;
 
+import java.beans.XMLEncoder;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.image.Image;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -32,6 +37,8 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import static javafx.application.Application.launch;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.Dialog;
 
 /**
  *
@@ -44,12 +51,16 @@ public class InterfaceFx extends Application {
     boolean firstClick = true;
     GrilleJeu demineur;
     private int width, height;
-    private int tpsTimer;
+    private int tpsTimer = 0;
+    private Timer leTimer;
     //nb de lignes pour la grille de l'interface
     private int nbL = 0;
     //nb de colonnes pour la grille de l'interface
     private int nbC = 0;
     private int nbB = 0; // nb bombes
+    private Label label1;
+    private Label label3;
+    private int level ;
 
     public static void main(String[] args) {
         launch(args);
@@ -78,14 +89,14 @@ public class InterfaceFx extends Application {
         buttons.getColumnConstraints().add(col);
         buttons.getColumnConstraints().add(col);
 
-        Label label1 = new Label("Temps");
+        label1 = new Label("Temps: 0");
         label1.setTextAlignment(TextAlignment.CENTER);
 
         /*Label label2 = new Label("Jouer");
          label2.setTextAlignment(TextAlignment.CENTER);*/
         Button btRestart = new Button("Restart");
         btRestart.setAlignment(Pos.CENTER);
-        Label label3 = new Label("Flags");
+        label3 = new Label("Bombes: "+ nbB);
         label3.setTextAlignment(TextAlignment.CENTER);
 
         buttons.add(label1, 0, 0);
@@ -99,6 +110,9 @@ public class InterfaceFx extends Application {
             //apres le clic on appelle la methode pour restart le demineur
             restart();
         });
+        
+         //= creTimer();
+        
 
         //IL Faut aligner les label au centre
         //Peut etre tenter de les mettre dans un autre composant...
@@ -161,6 +175,8 @@ public class InterfaceFx extends Application {
                 StackPane.setMargin(pane, new Insets(1, 1, 1, 1)); // StackPane
                 border.getChildren().add(pane);
                 //border.setCenter(pane);
+                   
+                
 
                 //c est ici qu'il fallait modifier pour afficher ton image 
                 //   pane.setStyle("-fx-background-color: white;");
@@ -192,11 +208,12 @@ public class InterfaceFx extends Application {
                             //pane.getChildren().add(lab);
                             //jeu.getChildren().add(fi*fj, lab);
                             jeu.add(lab, cel.getX(), cel.getY());
-
+                            
                             //le timer magique
-                            creTimer();
+                            //creTimer();
 
                         }
+                        leTimer = creTimer();
 
                     } else if (e.getButton().equals(MouseButton.PRIMARY) && (demineur.getGrilleExterieur()[fi][fj].getStatus() == -5)) {
 
@@ -235,6 +252,7 @@ public class InterfaceFx extends Application {
                                 //pane.getChildren().add(lab);
                                 //jeu.getChildren().add(fi*fj, lab);
                                 jeu.add(lab, cel.getX(), cel.getY());
+                                
 
                             }
                         }
@@ -243,7 +261,11 @@ public class InterfaceFx extends Application {
                             //juste un test de l'affichage
                             //il faut pouvoir savoir si on a gagner ou perdu avant d'utiliser la fct affiche
                             jeu.setDisable(true);
+                            leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
+                                //on serialise le score
+                                Score sc = new Score(level , tpsTimer);
+                                sc.updateBestScore();
                                 afficheFenetreFin(true);
                             } else {
                                 afficheFenetreFin(false);
@@ -280,7 +302,11 @@ public class InterfaceFx extends Application {
                         if (demineur.estFini(fi, fj)) {
                             // on affiche une fenetre et on bloque le reste
                             jeu.setDisable(true);
+                            leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
+                                //on serialise le score
+                                Score sc = new Score(level , tpsTimer);
+                                sc.updateBestScore();
                                 afficheFenetreFin(true);
                             } else {
                                 afficheFenetreFin(false);
@@ -329,28 +355,29 @@ public class InterfaceFx extends Application {
         alert.setTitle("Fin du jeu !");
         alert.setHeaderText(null);
         if (winner) {
-            alert.setContentText("GG, maintenant essaie avec un autre niveau");
+            alert.setContentText("Vous avez gagné en : "+tpsTimer+ " secondes");
         } else {
             alert.setContentText("Dommage, retente ta chance!");
         }
         alert.showAndWait();
 
     }
-
+    
     public void afficheFenetreDifficulte() {
-        //fenetre modale pour les lvl 
+        //fenetre modale pour les lvl
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Niveau de difficulté");
         alert.setHeaderText("Choisir un niveau de difficulté");
         //  alert.setContentText("Choose your option.");
-
+ 
         ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
         ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
         ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
+        ButtonType buttonTypeFour = new ButtonType("Personnaliser");
         // ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
-
+ 
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree,buttonTypeFour);
+ 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
             //l'utilisateur choisit facile(15*15)
@@ -359,17 +386,17 @@ public class InterfaceFx extends Application {
             nbL = 10;
             nbC = 10;
             nbB = 10;
-            width = 600;
-            height = 700;
+            width = nbC * 55;
+            height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeTwo) {
             //l'utilisateur choisit moyen(25*25)
-
+ 
             //GrilleJeu griM = new GrilleJeu(15, 15, 20);
             nbL = 15;
             nbC = 15;
             nbB = 25;
-            width = 900;
-            height = 900;
+            width = nbC * 55;
+            height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeThree) {
             //l'utilisateur choisit difficile(15*25)
             //pour difficile, la grille des bombes est inversées(25*15) par rapport a la grille exterieur(15*25)
@@ -377,15 +404,51 @@ public class InterfaceFx extends Application {
             nbL = 15;
             nbC = 25;
             nbB = 80;
-            width = 1400;
-            height = 1000;
-        } else {
-            // pb rage quit 
+            width = nbC * 55;
+            height = nbL * 55 + 150;
+        }else if (result.get() == buttonTypeFour) {
+            Dialog<int[]> dialog = new Dialog<>();
+            dialog.setTitle("Difficulté personnalisée");
+            dialog.setHeaderText("Choisissez les paramètres :");
+            dialog.setResizable(true);
+ 
+            Label label1 = new Label("Lignes: (max.15) ");
+            Label label2 = new Label("Colonnes: (max.20) ");
+            Label label3 = new Label("Nombre de bombes: (<L*C) ");
+            NumberTextField text1 = new NumberTextField();
+            NumberTextField text2 = new NumberTextField();
+            NumberTextField text3 = new NumberTextField();
+ 
+            GridPane grid = new GridPane();
+            grid.add(label1, 1, 1);
+            grid.add(text1, 3, 1);
+            grid.add(label2, 1, 2);
+            grid.add(text2, 3, 2);
+            grid.add(label3, 1, 3);
+            grid.add(text3, 3, 3);
+            dialog.getDialogPane().setContent(grid);
+ 
+            ButtonType buttonTypeOk = new ButtonType("Okay", ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+ 
+            Optional<int[]> result2 = dialog.showAndWait();
+ 
+            nbL = Integer.parseInt(text1.getText());
+            if(nbL>15){nbL=15;}
+            nbC = Integer.parseInt(text2.getText());
+            if(nbC>20){nbC=20;}
+            nbB = Integer.parseInt(text3.getText());
+            width = nbC * 55;
+            height = nbL * 55 + 150;
+        }else {
+            // pb rage quit
         }
     }
 
-    public void creTimer() {
-        /* Timer timer = new Timer();
+    
+
+    public Timer creTimer() {
+        Timer timer = new Timer();
          timer.scheduleAtFixedRate(new TimerTask() {
          @Override
          public void run() {
@@ -393,11 +456,13 @@ public class InterfaceFx extends Application {
          @Override
          public void run() {
          tpsTimer ++;
-         System.out.println(tpsTimer);
+         //System.out.println(tpsTimer);
+         label1.setText("Temps : " +tpsTimer);
          }
          });
          }
-         }, 0, 1000);*/
+         }, 0, 1000);
+        return timer;
     }
 
     public void restart() {
@@ -439,5 +504,13 @@ public class InterfaceFx extends Application {
                 return "-fx-font: 40 arial; -fx-text-fill: red;";
 
         }
+    }
+    
+    
+    
+    @Override
+    public void stop(){
+       leTimer.cancel();
+       
     }
 }
