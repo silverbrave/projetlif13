@@ -5,13 +5,9 @@
  */
 package mondemineur;
 
-import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,10 +20,12 @@ public class Score implements Serializable {
 
     private int difficulte;
     private int temps;
+    private String pseudo ;
 
-    public Score(int difficulte, int temps) {
+    public Score(int difficulte, int temps , String pseudo) {
         this.difficulte = difficulte;
         this.temps = temps;
+        this.pseudo = pseudo ;
     }
 
     public Score() {
@@ -49,7 +47,41 @@ public class Score implements Serializable {
         this.temps = temps;
     }
 
-    public void updateBestScore() {
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    public void updateScore() {
+        try {
+            String filename = null;
+            if (difficulte == 1 ){
+                filename = "score1.xml";
+            }else if (difficulte == 2)
+            {
+                filename = "score2.xml";
+            } else if ( difficulte ==3)
+            {
+                filename = "score3.xml";
+            }else {
+                return;
+            }
+            XMLEncoder encoder = new XMLEncoder(new FileOutputStream(filename));
+            try {
+                // serialisation de l'objet
+                encoder.writeObject(this);
+                encoder.flush();
+            } finally {
+                // fermeture de l'encodeur
+                encoder.close();
+            }
+            
+        }   catch (FileNotFoundException ex) {
+            Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 

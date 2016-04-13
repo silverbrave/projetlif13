@@ -132,13 +132,7 @@ public class GrilleJeu {
         }
     }
 
-    public boolean doPointInterrogation() {
-        return pointInterrogation;
-    }
-
-    public void doPointInterrogation(boolean b) {
-        pointInterrogation = b;
-    }
+    
 
     public void initialiseGrille(int firstLigne, int firstColonne) {
         flags = 0;

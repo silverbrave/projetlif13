@@ -248,9 +248,7 @@ public class InterfaceFx extends Application {
                             jeu.setDisable(true);
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
-                                //on serialise le score
-                                Score sc = new Score(level, tpsTimer);
-                                sc.updateBestScore();
+                                
                                 afficheFenetreFin(true);
                             } else {
                                 afficheFenetreFin(false);
@@ -299,8 +297,7 @@ public class InterfaceFx extends Application {
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
                                 //on serialise le score
-                                Score sc = new Score(level, tpsTimer);
-                                sc.updateBestScore();
+                                
                                 afficheFenetreFin(true);
                             } else {
                                 afficheFenetreFin(false);
@@ -348,6 +345,8 @@ public class InterfaceFx extends Application {
 
             Optional<String> result2 = dialog.showAndWait();
             String pseudo = text1.getText();
+            Score sc = new Score(level, tpsTimer , pseudo);
+            sc.updateScore();
             System.out.println(pseudo);
             
             // TODO
@@ -382,6 +381,7 @@ public class InterfaceFx extends Application {
             nbL = 10;
             nbC = 10;
             nbB = 10;
+            level = 1 ;
             width = nbC * 55;
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeTwo) {
@@ -389,6 +389,7 @@ public class InterfaceFx extends Application {
             nbL = 15;
             nbC = 15;
             nbB = 25;
+            level = 2 ;
             width = nbC * 55;
             if (width < 500) {
                 width = 500;
@@ -399,12 +400,14 @@ public class InterfaceFx extends Application {
             nbL = 15;
             nbC = 25;
             nbB = 80;
+            level = 3 ;
             width = nbC * 55;
             if (width < 500) {
                 width = 500;
             }
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeFour) {
+            level = -1 ;
             Dialog<int[]> dialog = new Dialog<>();
             dialog.setTitle("Difficulté personnalisée");
             dialog.setHeaderText("Choisissez les paramètres :");
@@ -564,12 +567,5 @@ public class InterfaceFx extends Application {
 
     }
 
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
-        }
-        return null;
-    }
+    
 }
