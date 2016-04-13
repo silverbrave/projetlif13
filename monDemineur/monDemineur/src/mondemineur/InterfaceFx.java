@@ -5,7 +5,6 @@
  */
 package mondemineur;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Random;
@@ -33,15 +32,12 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import static javafx.application.Application.launch;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
-import javafx.scene.Node;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import static mondemineur.GrilleJeu.BOMBE;
 
 /**
  *
@@ -68,14 +64,13 @@ public class InterfaceFx extends Application {
     private boolean hardcore = false;
     private Button btRestart;
     private Pane[][] paneArray;
-
+    
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) {
-
         tpsTimer = 0;
         afficheFenetreDifficulte();
 
@@ -248,7 +243,7 @@ public class InterfaceFx extends Application {
                             jeu.setDisable(true);
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
-                                
+
                                 afficheFenetreFin(true);
                             } else {
                                 afficheFenetreFin(false);
@@ -264,20 +259,19 @@ public class InterfaceFx extends Application {
                         flag.setMouseTransparent(true);
                         idk.setMouseTransparent(true);
                         switch (demineur.getGrilleExterieur()[fi][fj].getStatus()) {
-                            // ça marche pas pour l'instant
+                            // on met le flag
                             case -2:
 
                                 jeu.add(flag, cFlag.getX(), cFlag.getY());
 
                                 break;
-                            //on met ?
+                            //on met le ?
                             case -3:
                                 jeu.getChildren().remove(flag);
                                 jeu.add(idk, cFlag.getX(), cFlag.getY());
 
                                 break;
                             //on recouvre
-                            //jeu.setStyle("fx-img: ");
                             case -5:
                                 jeu.getChildren().remove(idk);
                                 break;
@@ -297,7 +291,7 @@ public class InterfaceFx extends Application {
                             leTimer.cancel();
                             if (demineur.gagne(fi, fj)) {
                                 //on serialise le score
-                                
+
                                 afficheFenetreFin(true);
                             } else {
                                 afficheFenetreFin(false);
@@ -345,14 +339,9 @@ public class InterfaceFx extends Application {
 
             Optional<String> result2 = dialog.showAndWait();
             String pseudo = text1.getText();
-            Score sc = new Score(level, tpsTimer , pseudo);
+            Score sc = new Score(level, tpsTimer, pseudo);
             sc.updateScore();
-            System.out.println(pseudo);
-            
-            // TODO
-            /*
-            enregistrerScore(pseudo,tpsTimer);
-            */
+            jeu.setDisable(true);
         } else {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Partie terminée !");
@@ -368,9 +357,9 @@ public class InterfaceFx extends Application {
         alert.setTitle("Niveau de difficulté");
         alert.setHeaderText("Choisir un niveau de difficulté");
 
-        ButtonType buttonTypeOne = new ButtonType("Facile(10*10)");
-        ButtonType buttonTypeTwo = new ButtonType("Moyen(15*15)");
-        ButtonType buttonTypeThree = new ButtonType("Difficile(15*25)");
+        ButtonType buttonTypeOne = new ButtonType("Facile(8*8)");
+        ButtonType buttonTypeTwo = new ButtonType("Moyen(12*12)");
+        ButtonType buttonTypeThree = new ButtonType("Difficile(12*16)");
         ButtonType buttonTypeFour = new ButtonType("Personnaliser");
 
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeFour);
@@ -378,18 +367,21 @@ public class InterfaceFx extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
             //facile
-            nbL = 10;
-            nbC = 10;
-            nbB = 10;
-            level = 1 ;
+            nbL = 8;
+            nbC = 8;
+            nbB = 8;
+            level = 1;
             width = nbC * 55;
+            if (width < 500) {
+                width = 500;
+            }
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeTwo) {
             //moyen
-            nbL = 15;
-            nbC = 15;
+            nbL = 12;
+            nbC = 12;
             nbB = 25;
-            level = 2 ;
+            level = 2;
             width = nbC * 55;
             if (width < 500) {
                 width = 500;
@@ -397,24 +389,24 @@ public class InterfaceFx extends Application {
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeThree) {
             //difficile
-            nbL = 15;
-            nbC = 25;
-            nbB = 80;
-            level = 3 ;
+            nbL = 12;
+            nbC = 16;
+            nbB = 65;
+            level = 3;
             width = nbC * 55;
             if (width < 500) {
                 width = 500;
             }
             height = nbL * 55 + 150;
         } else if (result.get() == buttonTypeFour) {
-            level = -1 ;
+            level = -1;
             Dialog<int[]> dialog = new Dialog<>();
             dialog.setTitle("Difficulté personnalisée");
             dialog.setHeaderText("Choisissez les paramètres :");
             dialog.setResizable(true);
 
-            Label label1 = new Label("Lignes: (max.15) ");
-            Label label2 = new Label("Colonnes: (max.20) ");
+            Label label1 = new Label("Lignes: (max.12) ");
+            Label label2 = new Label("Colonnes: (max.16) ");
             Label label3 = new Label("Nombre de bombes: (<L*C) ");
             Label label4 = new Label("Mode hardcore :");
 
@@ -441,12 +433,12 @@ public class InterfaceFx extends Application {
             Optional<int[]> result2 = dialog.showAndWait();
 
             nbL = Integer.parseInt(text1.getText());
-            if (nbL > 15) {
-                nbL = 15;
+            if (nbL > 12) {
+                nbL = 12;
             }
             nbC = Integer.parseInt(text2.getText());
-            if (nbC > 20) {
-                nbC = 20;
+            if (nbC > 16) {
+                nbC = 16;
             }
             nbB = Integer.parseInt(text3.getText());
             width = nbC * 55;
@@ -455,8 +447,6 @@ public class InterfaceFx extends Application {
             }
             height = nbL * 55 + 150;
             hardcore = cb.isSelected();
-        } else {
-            // pb rage quit
         }
     }
 
@@ -508,19 +498,19 @@ public class InterfaceFx extends Application {
         System.out.println("TU VEUX RECOMMENCER ?");
         jeu.getChildren().clear();
         jeu = new GridPane();
-         // demineur=;
-         firstClick = true;
-           GrilleJeu demineur;
-    
-            tpsTimer = 0;
+        // demineur=;
+        firstClick = true;
+        GrilleJeu demineur;
+        leTimer.cancel();
+        tpsTimer = 0;
 
-    //nb de lignes pour la grille de l'interface
-            nbL = 0;
-    //nb de colonnes pour la grille de l'interface
-             nbC = 0;
-                nbB = 0; // nb bombes
-         hardcore = false;
-         start(stage);
+        //nb de lignes pour la grille de l'interface
+        nbL = 0;
+        //nb de colonnes pour la grille de l'interface
+        nbC = 0;
+        nbB = 0; // nb bombes
+        hardcore = false;
+        start(stage);
         //TODO 
         // voir si on relance l'appli (je pense tres dure a implementer)
         //soit tout reset et reafficher la fenetre avec les difficultes?
@@ -567,5 +557,4 @@ public class InterfaceFx extends Application {
 
     }
 
-    
 }
