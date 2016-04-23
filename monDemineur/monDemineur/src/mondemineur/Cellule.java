@@ -10,8 +10,8 @@ package mondemineur;
  * @author Florian Hugo et Kevin
  */
 public class Cellule {
-    int _x, _y;
-    int status;
+    private int _x, _y;
+    private int status;
     
     
     
