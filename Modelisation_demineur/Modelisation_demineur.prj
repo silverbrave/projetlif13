@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?PowerDesigner AppLocale="UTF16" ID="{96699B0B-37D7-447B-9BB1-D7E6B8DFE83D}" Label="" LastModificationDate="1461438769" Name="Modelisation_demineur" Objects="5" Symbols="0" Type="{FF4B6538-9856-42CF-B9B9-304ED370CEAA}" signature="PRJ_MODEL_XML" version="15.1.0.2850"?>
+<?PowerDesigner AppLocale="UTF16" ID="{96699B0B-37D7-447B-9BB1-D7E6B8DFE83D}" Label="" LastModificationDate="1461597578" Name="Modelisation_demineur" Objects="6" Symbols="1" Type="{FF4B6538-9856-42CF-B9B9-304ED370CEAA}" signature="PRJ_MODEL_XML" version="15.1.0.2850"?>
 <!-- Veuillez ne pas modifier ce fichier -->
 
 <Model xmlns:a="attribute" xmlns:c="collection" xmlns:o="object">
@@ -12,22 +12,8 @@
 <a:Code>Modelisation_demineur</a:Code>
 <a:CreationDate>1461414576</a:CreationDate>
 <a:Creator>Kevin</a:Creator>
-<a:ModificationDate>1461437068</a:ModificationDate>
-<a:Modifier>florian</a:Modifier>
-<a:PackageOptionsText>[FolderOptions]
-
-[FolderOptions\Project Objects]
-GenerationCheckModel=Yes
-GenerationPath=
-GenerationOptions=
-GenerationTasks=
-GenerationTargets=
-GenerationSelections=
-RbldDeplinkFile=Yes
-RbldDeplinkGene=Yes
-RbldDeplinkRefr=Yes
-RbldDeplinkMapp=Yes
-RbldDeplinkOpnm=Yes</a:PackageOptionsText>
+<a:ModificationDate>1461414586</a:ModificationDate>
+<a:Modifier>Kevin</a:Modifier>
 <a:ModelOptionsText>[ModelOptions]
 
 [ModelOptions\Prj options]
@@ -182,13 +168,13 @@ ConvTablePath=%_HOME%\Fichiers de ressources\Tables de conversion</a:ModelOption
 <a:Project.Template>1</a:Project.Template>
 <c:ProjectDiagrams>
 <o:ProjectDiagram Id="o3">
-<a:ObjectID>C720DA51-E79F-4C07-8763-B874A384DFC6</a:ObjectID>
+<a:ObjectID>DA20C90D-A516-45BB-B2A3-56AF0B4B8439</a:ObjectID>
 <a:Name>Diagramme_1</a:Name>
 <a:Code>Diagramme_1</a:Code>
-<a:CreationDate>1461437052</a:CreationDate>
-<a:Creator>florian</a:Creator>
-<a:ModificationDate>1461437052</a:ModificationDate>
-<a:Modifier>florian</a:Modifier>
+<a:CreationDate>1461596807</a:CreationDate>
+<a:Creator>Kevin</a:Creator>
+<a:ModificationDate>1461596807</a:ModificationDate>
+<a:Modifier>Kevin</a:Modifier>
 <a:DisplayPreferences>[DisplayPreferences]
 
 [DisplayPreferences\PRJ]
@@ -457,50 +443,84 @@ Shadow=0</a:DisplayPreferences>
 <a:PaperSize>(8268, 11693)</a:PaperSize>
 <a:PageMargins>((315,354), (433,354))</a:PageMargins>
 <a:PageOrientation>1</a:PageOrientation>
-<a:PaperSource>15</a:PaperSource>
+<a:PaperSource>7</a:PaperSource>
+<c:Symbols>
+<o:ModelDocumentSymbol Id="o4">
+<a:IconMode>2</a:IconMode>
+<a:Rect>((-1201,-148), (1198,2251))</a:Rect>
+<a:LineColor>12034707</a:LineColor>
+<a:FillColor>16437422</a:FillColor>
+<a:ShadowColor>12632256</a:ShadowColor>
+<a:FontList>OBJSTRN 0 Arial,8,N
+DISPNAME 0 Arial,8,N
+LABL 0 Arial,8,N</a:FontList>
+<a:BrushStyle>6</a:BrushStyle>
+<a:GradientFillMode>65</a:GradientFillMode>
+<a:CustomPictureType>4</a:CustomPictureType>
+<a:CustomTextMode>1</a:CustomTextMode>
+<a:GradientEndColor>16777215</a:GradientEndColor>
+<a:KeepAspect>1</a:KeepAspect>
+<c:Object>
+<o:ModelDocument Ref="o5"/>
+</c:Object>
+</o:ModelDocumentSymbol>
+</c:Symbols>
 </o:ProjectDiagram>
 </c:ProjectDiagrams>
 <c:DefaultDiagram>
 <o:ProjectDiagram Ref="o3"/>
 </c:DefaultDiagram>
 <c:ModelsAndFiles>
-<o:ModelDocument Id="o4">
+<o:ModelDocument Id="o6">
 <a:ObjectID>43A0FCA7-8B01-466D-9A7E-68D954FCB0ED</a:ObjectID>
 <a:Name>Classe</a:Name>
 <a:Code>Classe</a:Code>
 <a:CreationDate>1461415434</a:CreationDate>
 <a:Creator>Kevin</a:Creator>
-<a:ModificationDate>1461437071</a:ModificationDate>
-<a:Modifier>florian</a:Modifier>
+<a:ModificationDate>1461415944</a:ModificationDate>
+<a:Modifier>Kevin</a:Modifier>
 <a:Location>file:///%[PRJ_ROOT_DIR]%/Classe.moo</a:Location>
 <a:Extension>moo</a:Extension>
 <a:ModelDocument.ModelID>C3A20A12-D7D4-4AF7-9A09-7FB7BAD6F574</a:ModelDocument.ModelID>
 <a:ModelClassID>18112060-1A4B-11D1-83D9-444553540000</a:ModelClassID>
 </o:ModelDocument>
-<o:ModelDocument Id="o5">
+<o:ModelDocument Id="o7">
 <a:ObjectID>DA21DDBA-B63C-4F7B-84A1-E12C19A4D554</a:ObjectID>
 <a:Name>CasUtilisation</a:Name>
 <a:Code>CasUtilisation</a:Code>
 <a:CreationDate>1461421354</a:CreationDate>
 <a:Creator>Kevin</a:Creator>
-<a:ModificationDate>1461422044</a:ModificationDate>
+<a:ModificationDate>1461596891</a:ModificationDate>
 <a:Modifier>Kevin</a:Modifier>
 <a:Location>file:///%[PRJ_ROOT_DIR]%/CasUtilisation.moo</a:Location>
 <a:Extension>moo</a:Extension>
 <a:ModelDocument.ModelID>BE5D77B4-94D2-4EE7-8931-5890CC927412</a:ModelDocument.ModelID>
 <a:ModelClassID>18112060-1A4B-11D1-83D9-444553540000</a:ModelClassID>
 </o:ModelDocument>
-<o:ModelDocument Id="o6">
-<a:ObjectID>CCA04113-B47B-4489-80CA-0197C6EE26FA</a:ObjectID>
+<o:ModelDocument Id="o5">
+<a:ObjectID>3E43297B-FCF0-43B0-BADC-8E834C5B01BC</a:ObjectID>
 <a:Name>DS_choisir_difficulté</a:Name>
 <a:Code>DS_choisir_difficulte</a:Code>
-<a:CreationDate>1461437203</a:CreationDate>
-<a:Creator>florian</a:Creator>
-<a:ModificationDate>1461438769</a:ModificationDate>
-<a:Modifier>florian</a:Modifier>
+<a:CreationDate>1461596854</a:CreationDate>
+<a:Creator>Kevin</a:Creator>
+<a:ModificationDate>1461596860</a:ModificationDate>
+<a:Modifier>Kevin</a:Modifier>
 <a:Location>file:///%[PRJ_ROOT_DIR]%/DS_choisir_difficulté.moo</a:Location>
 <a:Extension>moo</a:Extension>
 <a:ModelDocument.ModelID>0597D521-4E5E-4D37-8C76-828CDF0F3229</a:ModelDocument.ModelID>
+<a:ModelClassID>18112060-1A4B-11D1-83D9-444553540000</a:ModelClassID>
+</o:ModelDocument>
+<o:ModelDocument Id="o8">
+<a:ObjectID>4D07D36C-9480-444D-83EC-6C2390E22381</a:ObjectID>
+<a:Name>Sequence</a:Name>
+<a:Code>Sequence</a:Code>
+<a:CreationDate>1461596885</a:CreationDate>
+<a:Creator>Kevin</a:Creator>
+<a:ModificationDate>1461597578</a:ModificationDate>
+<a:Modifier>Kevin</a:Modifier>
+<a:Location>file:///%[PRJ_ROOT_DIR]%/Sequence.moo</a:Location>
+<a:Extension>moo</a:Extension>
+<a:ModelDocument.ModelID>80EB4792-1D77-4808-9FE6-B0D1FD9B35E7</a:ModelDocument.ModelID>
 <a:ModelClassID>18112060-1A4B-11D1-83D9-444553540000</a:ModelClassID>
 </o:ModelDocument>
 </c:ModelsAndFiles>
