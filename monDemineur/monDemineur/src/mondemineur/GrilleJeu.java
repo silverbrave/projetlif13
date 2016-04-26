@@ -30,7 +30,7 @@ public class GrilleJeu {
 
     //La cellule n'est pas encore découverte.
     public static final int COUVERTE = -5;
-    
+
     //La cellule contient une bombe qui a explosée.
     public static final int EXPLODE = -9;
 
@@ -93,8 +93,6 @@ public class GrilleJeu {
     public boolean estFini(int l, int c) {
         if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG && grilleExterieur[l][c].getStatus() != IDK && grilleExterieur[l][c].getStatus() != COUVERTE) {
             return true;
-        } else if (celluleRestantes == 0 && flags == bombes) {
-            return true;
         } else if (flags == bombes) {
             for (int i = 0; i < lignes; i++) {
                 for (int j = 0; j < colonnes; j++) {
@@ -106,16 +104,18 @@ public class GrilleJeu {
 
             return true;
 
+        } else if (celluleRestantes == 0) {
+
+            
+            return true;
         } else {
             return false;
         }
     }
-    
-    public boolean gagne(int l , int c) {
+
+    public boolean gagne(int l, int c) {
         if (grille[l][c].getStatus() == BOMBE && grilleExterieur[l][c].getStatus() != FLAG && grilleExterieur[l][c].getStatus() != IDK && grilleExterieur[l][c].getStatus() != COUVERTE) {
             return false;
-        } else if (celluleRestantes == 0 && flags == bombes) {
-            return true;
         } else if (flags == bombes) {
             for (int i = 0; i < lignes; i++) {
                 for (int j = 0; j < colonnes; j++) {
@@ -126,13 +126,14 @@ public class GrilleJeu {
             }
 
             return true;
+        } else if (celluleRestantes == 0) {
 
+            
+            return true;
         } else {
             return false;
         }
     }
-
-    
 
     public void initialiseGrille(int firstLigne, int firstColonne) {
         flags = 0;
@@ -293,5 +294,5 @@ public class GrilleJeu {
         return s;
 
     }
-    
+
 }
